@@ -219,11 +219,14 @@ To protect against information disclosure and tampering, confidentiality protect
 
 ## Impersonation Attacks
 
-TLS certificate checking MUST be performed by the authorization server, as described in [](#tls-requirements), when making a client metadata request. Checking that the server certificate is valid for the "client_uri" URL prevents man-in-middle and DNS-based attacks. These attacks could cause a authorization server to be tricked into using an attacker's keys and endpoints, which would enable impersonation of the legitimate client.  If an attacker can accomplish this, they can access the resources that the affected client has access to by impersonating their profile.
+TLS certificate checking MUST be performed by the authorization server, as described in [](#tls-requirements), when making a client metadata request. Checking that the server certificate is valid for the "client_uri" URL prevents man-in-middle and DNS-based attacks. These attacks could cause an authorization server to be tricked into using an attacker's keys and endpoints, which would enable impersonation of the legitimate client.  If an attacker can accomplish this, they can access the resources that the affected client has access to by impersonating their profile.
 
 An attacker may also attempt to impersonate a client by publishing a metadata document that contains a "client_uri" claim using the "client_uri" URL of the client being impersonated, but with its own endpoints and signing keys. This would enable it to impersonate that client, if accepted
 by the authorization server.  To prevent this, the authorization server MUST ensure that the "client_uri" URL it is using as the prefix for the metadata request exactly matches the value of the "client_uri" metadata value in the client's metadata document received by the authorization server.
 
+## Server Side Request Forgery (SSRF) Attacks
+
+Authorization servers resolving metadata of a client and intending to resolve URLs in the metadata document should pay attention to the possibility of private and loopback address in them. The SSRF attacks could allow an attacker to trick an authorization server to make requests to an unintended location. Filtering URLs based on domain names (e.g blacklisting localhost domain name or loopback address) do not guarantee protection against SSRF attacks since an attacker can easily setup a DNS server and use a domain name which points to local IP address or local domain.  The most effective protection against SSRF attack is by ensuring the subject authorization service is boxed in an environment where no other local services are exposed. Another approach to protect against SSRF attacks is to use a proxy server which can only resolve public addresses and has no knowledge of any internal address. If no proper vetting is done, custom scheme URIs and non-http schemes can also be susceptible to SSRF attacks.
 
 # Compatibility Notes
 
