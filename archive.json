@@ -1,0 +1,1891 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2022-11-15T00:04:08.764398+00:00",
+  "repo": "mattrglobal/draft-looker-oauth-client-discovery",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 5,
+      "id": "I_kwDOH6x2C85UFx_9",
+      "title": "Placeholder to add operational considerations ",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/issues/5",
+      "state": "OPEN",
+      "author": "karthiknz",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "# Operational Considerations\r\n\r\n## Caching\r\n\r\n<< TODO - Expand on caching considerations for the client metadata that could be added (e.g HTTP request caching) to limit how often an AS/OP actually needs to resolve the client's ID. >>\r\n\r\n## Proposed Client Authentication methods (to avoid storing client credentials)\r\n\r\n<< TODO - Explain different methods for client authenticaiton (attestation, JWTs for client authentication {{!RFC7523}} >>",
+      "createdAt": "2022-10-17T02:57:17Z",
+      "updatedAt": "2022-10-17T02:57:17Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOH6x2C85UGX_3",
+      "title": "Security Consideration - Referencing RFC 8414 vs defining in the spec",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/issues/6",
+      "state": "OPEN",
+      "author": "karthiknz",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "<< TODO - Would it be easier to reference security considerations listed in RFC 8414?? >>",
+      "createdAt": "2022-10-17T06:05:24Z",
+      "updatedAt": "2022-10-17T06:05:24Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOH6x2C85UGYYq",
+      "title": "TODO - Compatibility Notes ",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/issues/7",
+      "state": "OPEN",
+      "author": "karthiknz",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "<< TODO - Reference OpenID Federation Compatibility consideration >>",
+      "createdAt": "2022-10-17T06:06:48Z",
+      "updatedAt": "2022-10-17T06:06:48Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 10,
+      "id": "I_kwDOH6x2C85U05yp",
+      "title": "Add a security consideration around trusting metadata elements that describe the clients identity",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/issues/10",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "As highlighted by Torsten, attributes like client_name and client_logo that are present in the clients metadata can be a source of possible impersonation if the AS places false trust in this information, the existing security consideration around impersonation should be expanded to highlight this.",
+      "createdAt": "2022-10-25T21:44:03Z",
+      "updatedAt": "2022-10-25T21:44:03Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 11,
+      "id": "I_kwDOH6x2C85U2s-k",
+      "title": "Add a security consideration for Server Side Request Forgey (SSRF)",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/issues/11",
+      "state": "OPEN",
+      "author": "CheariX",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The current draft should discuss and provide mitigation strategies for SSRF.\r\n\r\nCurrently, I see the following issues:\r\n\r\n# Attack Vectors\r\n\r\n1. [Client Metadata Response](https://www.ietf.org/archive/id/draft-looker-oauth-client-discovery-00.html#name-client-metadata-response)\r\n\r\n```json\r\n   \"logo_uri\": \"https://client.example.com/logo.png\",\r\n    \"jwks_uri\": \"https://client.example.com/my_public_keys.jwks\",\r\n```\r\nThese parameters could force an AS calling untrusted URLs, such as private IPs / internal networks, known as SSRF.\r\n\r\n2. [Authorization Request Using Client Discovery](https://www.ietf.org/archive/id/draft-looker-oauth-client-discovery-00.html#name-authorization-request-using)\r\n\r\n```\r\nclient_id=https%3A%2F%2Fclient.example.com\r\n    &client_discovery=true\r\n```\r\n\r\nAn attacker could abuse `client_id` (which is an URL in that case) and `client_discovery` to farce ans AS calling untrusted URLs, such as private IPs / internal networks, known as SSRF.\r\n\r\n3.  [Token Request Using Client Discovery](https://www.ietf.org/archive/id/draft-looker-oauth-client-discovery-00.html#name-token-request-using-client-)\r\n\r\nsame as above.\r\n\r\n# Mitigation:\r\n\r\nPreventing SSRF is hard and complex, since we exactly want the AS to gather a client's information via an *unknown* URL.\r\nMy suggestion is to add a discussion about these threats in the security considerations.\r\nWe could also deny calling of private IPs (https://datatracker.ietf.org/doc/html/rfc1918#section-3, IPv6 TBD) and require a domain name instead of an IP address.\r\nAlso, we should define \"https\" as the only allowed protocol (no `javascript:`, `data:`, whatever ...).",
+      "createdAt": "2022-10-26T08:22:14Z",
+      "updatedAt": "2022-11-08T21:58:07Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks @CheariX I believe it is worthwhile having some security consideration w.r.t this topic.\r\n\r\nSection 2 already contains this language w.r.t the client_uri value.\r\n\r\n> The value of this field MUST be a URI as defined in RFC3986 [[RFC3986](https://mattrglobal.github.io/draft-looker-oauth-client-discovery/draft-looker-oauth-client-discovery.html#RFC3986)] with a scheme component that MUST be https, a host component, and optionally, port and path components and no query or fragment components. Additionally, host names MUST be domain names or a loopback interface and MUST NOT be IPv4 or IPv6 addresses except for IPv4 127.0.0.1 or IPv6 (::1).\r\n\r\nBut I believe what you are suggesting is that ANY uri resolved from the metadata document should have such constraints? If so I think this would work in most cases but could also be overly prescriptive as a general rule, for example redirect uri's often use custom uri schemes which would prevent the general rule of enforcing \"https\", would you agree?",
+          "createdAt": "2022-10-26T21:03:20Z",
+          "updatedAt": "2022-10-26T21:03:20Z"
+        },
+        {
+          "author": "CheariX",
+          "authorAssociation": "NONE",
+          "body": "> Section 2 already contains this language w.r.t the client_uri value.\r\n\r\nYes. It's good to have it there.\r\nHowever:\r\n\r\n1. I don't see any reason for allowing private IPs and loopback adresses, such as `127.1` or `::1`. Did I miss anything? Is there a valid use-case that I'm unaware of? If allowed, attacker could use these IPs, for example, to scan what services are running on that server (information disclosure via port scanning). I think, we one should better prohibit all private IPs.\r\n\r\n2. I'd like to see the term \"Serve-Side Request Forgery\" in the security considerations. For example. we could point to [OWASP](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html#case-2-application-can-send-requests-to-any-external-ip-address-or-domain-name) to help developers/administrators to be aware of such issue. They also recommend to prohibit access to internal networks.\r\nI think that this point is not clear for everyone by reading section 2.\r\n\r\nAbout the `https` scheme:\r\nI know that some clients use custom schemes (e.g., Googles uses `storagerelay://`). But allowing arbitrary schmes may result in severe vulnerabilities (e.g., we found and `javascript://` Bug in [Keycloak](https://web-in-security.blogspot.com/2020/11/single-sign-on-security-security.html) leading to XSS).\r\nSo I'm not a big fan of this point and think it's safer to disallow it in such dynamic use-cases like client discovery.",
+          "createdAt": "2022-10-27T07:18:38Z",
+          "updatedAt": "2022-10-27T07:18:38Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "> I don't see any reason for allowing private IPs and loopback adresses, such as 127.1 or ::1. Did I miss anything? Is there a valid use-case that I'm unaware of? If allowed, attacker could use these IPs, for example, to scan what services are running on that server (information disclosure via port scanning). I think, we one should better prohibit all private IPs.\r\n\r\nI'd like to seek further feedback from the wider OAuth2 WG about how much more prescriptive we want to be here, I appreciate that should at a minimum be discussed in security considerations but a normative MUST may be too strong. For example in certain situations certainly during initial application development, being able to use a local host based URL does have some practical advantages.\r\n\r\n> I'd like to see the term \"Serve-Side Request Forgery\" in the security considerations. For example. we could point to [OWASP](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html#case-2-application-can-send-requests-to-any-external-ip-address-or-domain-name) to help developers/administrators to be aware of such issue. They also recommend to prohibit access to internal networks.\r\nI think that this point is not clear for everyone by reading section 2.\r\n\r\nYes this seems reasonable to me.\r\n\r\n> About the https scheme:\r\nI know that some clients use custom schemes (e.g., Googles uses storagerelay://). But allowing arbitrary schmes may result in severe vulnerabilities (e.g., we found and javascript:// Bug in [Keycloak](https://web-in-security.blogspot.com/2020/11/single-sign-on-security-security.html) leading to XSS).\r\nSo I'm not a big fan of this point and think it's safer to disallow it in such dynamic use-cases like client discovery.\r\n\r\nI was more thinking about situations where say a client has a redirect_uri that uses a custom platform specific scheme `e.g com.example.application://`, could you propose how we could limit without excluding these cases? Perhaps a security recommendation that outlines common schemes that are problematic?",
+          "createdAt": "2022-10-27T21:00:15Z",
+          "updatedAt": "2022-10-27T21:00:15Z"
+        },
+        {
+          "author": "CheariX",
+          "authorAssociation": "NONE",
+          "body": "> I was more thinking about situations where say a client has a redirect_uri that uses a custom platform specific scheme e.g com.example.application://, could you propose how we could limit without excluding these cases? Perhaps a security recommendation that outlines common schemes that are problematic?\r\n\r\nI took me some time to think about this. If we really want to support such custom schemes, it is hard to deal with \"dangerous\" schemes. AFAIK, there is no complete list. Working with denylists are known to be a weak mitigation (in contrast to allowlists).\r\nSince allowlists won't work if custom schemes should be supported, I think the best would be to recommend the developers in the security considerations to allow https-only schemes if applicable and otherwise make them aware of dangerous schemes such as `javascript://`. ",
+          "createdAt": "2022-11-02T07:45:34Z",
+          "updatedAt": "2022-11-02T07:45:34Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "@CheariX agreed also given the client's metadata document is itself an extensible data model, meaning that it may feature new metadata elements in future it would be hard to apply a blanket rule that applies to all uri's that may occur in this discovery document. I believe instead we should add a security consideration to the document that describes this.\r\n\r\nAlso please see #16 that we have merged which I think at least partially addresses one vector for SSRF.",
+          "createdAt": "2022-11-08T21:58:06Z",
+          "updatedAt": "2022-11-08T21:58:06Z"
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "id": "I_kwDOH6x2C85VLSLE",
+      "title": "Retain compatibility with equivalent OpenID Connect feature",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/issues/12",
+      "state": "OPEN",
+      "author": "selfissued",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "There's a long history of cooperation between the OAuth working group and the OpenID Connect working group to keep equivalent features in both sets of standards compatible with one other, by design.  This has served the industry well.\r\n\r\nTypically such features are invented by the OpenID Connect working group and then subsetted to back-port them to OAuth 2.0.  Here's some examples:\r\n\r\n- RFC 7591 is compatible with OpenID Connect Dynamic Client Registration\r\n- RFC 8414 is compatible with OpenID Connect Discovery\r\n- RFC 9101 is compatible with OpenID Connect Request Objects\r\n\r\nWe have another opportunity with this spec to bring another existing feature invented by the OpenID Connect working group to OAuth in a compatible way - in this case, [Automatic Client Registration](https://openid.net/specs/openid-connect-federation-1_0-24.html#name-automatic-registration).  This already-deployed feature accomplishes the goals of this proposed specification.  (I'll also note that the inventors of the feature designed it explicitly to be usable by pure OAuth deployments - not just OpenID Connect Federation deployments.)  As I see it, there would need to be a very compelling reason to invent and standardize a different and incompatible OAuth Automatic Client Registration mechanism.\r\n\r\nTherefore, please update the spec to do what we've always done before:  Create an Internet Draft that retains the subset of the existing functionality that's relevant to the OAuth 2.0 ecosystem in a compatible way.  I'd be glad to help you do that.  Thanks!",
+      "createdAt": "2022-10-30T21:18:13Z",
+      "updatedAt": "2022-11-01T05:53:12Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "I agree and support the intent of this issue and in general there appears to be significant overlap in scope between this draft and the automatic registration mechanism described in the OpenID Federation draft, however there does also appear to be some differences that I think are important to highlight.\r\n\r\nSimilarities\r\n\r\n- Both drafts define a way for a client to set the client_id in an authorization request to a URL (or encoded URL value) alongside an additional request parameter, called `client_discovery` in this draft and `automatic_registration` in federation draft which is used as a signal to indicate to the AS/OP that the client is identifying itself in this manner as opposed to the more conventional approach with OAuth2 that involves using a pre-assigned client_id supplied by the AS.\r\n- In both drafts the client is expected to expose its metadata at a well-known endpoint, `/.well-known/oauth-client` in this draft and `/.well-known/openid-federation` in openid federation.\r\n\r\nDifferences\r\n\r\nAutomatic registration as defined by openid federation is more specifically defined to address the usecases around openid federation. Whereas OAuth client discovery is designed to be generally useful within OAuth2, that is any OAuth2 flow should be able to make use of this \"client discovery\" feature, for example:\r\n- OpenID federation defines a parameter for use in the authorization request but not the token request, meaning OAuth flows that involve the client interacting at the token endpoint or perhaps starting here is somewhat undefined (again this is probably because federation does not have such usecases for these flows)\r\n-  OpenID federation sets the expectation around the usage and validation of entity attestations and requires the usage of the signed request object for client authentication in the authorization request. Whereas OAuth client discovery is only focused on how a client makes its metadata available at a well-known endpoint for consumption by an AS/OP and how the client indicates this capability in an authorization and or token request towards the AS/OP.",
+          "createdAt": "2022-11-01T05:53:12Z",
+          "updatedAt": "2022-11-01T05:53:12Z"
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "id": "I_kwDOH6x2C85VLSsx",
+      "title": "Remove unnecessary client_uri parameter",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/issues/13",
+      "state": "OPEN",
+      "author": "selfissued",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "In [Automatic Client Registration](https://openid.net/specs/openid-connect-federation-1_0-24.html#name-automatic-registration), there's no need for the `client_uri` parameter because this information is already carried in the `client_id` parameter.  When an authorization server receives a request with a `client_id` value that is an `https` URL, it retrieves the contents of the URL to obtain the client data.\r\n\r\nNote that the authorization server can tell that the resource contains data about the client because the response uses the media type `application/entity-statement+jwt`.\r\n\r\nTherefore, please remove the unnecessary `client_uri` parameter.  Thanks.",
+      "createdAt": "2022-10-30T21:26:38Z",
+      "updatedAt": "2022-11-09T12:31:15Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Just to clarify where would you like to remove this from, the intent of the draft (which I suspect is unclear) is when a client is making an authorization or token request to an AS and is wishing to indicate it is discoverable, that it set its client_id == its client_uri, the value of the client_uri for the client is also present in its resolved metadata.",
+          "createdAt": "2022-10-30T21:33:35Z",
+          "updatedAt": "2022-10-30T21:33:35Z"
+        },
+        {
+          "author": "selfissued",
+          "authorAssociation": "NONE",
+          "body": "I understand the intent.  My point is that you can already tell that the client is publishing its client information for retrieval by the AS by sending an `https`-valued `client_id` without having this parameter.  Having the `application/entity-statement+jwt` media type in the response is a double-check on that.",
+          "createdAt": "2022-10-30T21:37:21Z",
+          "updatedAt": "2022-10-30T21:37:21Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "NONE",
+          "body": "This does bring up the question of how you would indicate a resolvable client_id that is using a scheme other than `https`. Tho I personally tend to agree that using `client_id` for this rather than defining a new parameter makes sense.",
+          "createdAt": "2022-11-09T12:31:15Z",
+          "updatedAt": "2022-11-09T12:31:15Z"
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "I_kwDOH6x2C85VLTMQ",
+      "title": "Signing requests can prevent impersonation attacks",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/issues/14",
+      "state": "OPEN",
+      "author": "selfissued",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "If the client signs its requests using [Automatic Registration](https://openid.net/specs/openid-connect-federation-1_0-24.html#name-automatic-registration) with keys published at the location its `https` Client ID refers to, then that proves that the client is in possession of the corresponding private keys.  This can prevent client impersonation.\r\n\r\nPlease consider updating the Impersonation Attacks section to discuss this possible mitigation.\r\n",
+      "createdAt": "2022-10-30T21:34:37Z",
+      "updatedAt": "2022-10-30T21:34:37Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 15,
+      "id": "I_kwDOH6x2C85VRPDf",
+      "title": "Inserting .well-known at the beginning of the path is unworkable",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/issues/15",
+      "state": "OPEN",
+      "author": "selfissued",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The spec describes \"inserting \"/.well-known/\" and the well-known URI suffix between the host component and the path component\".  I know why you're specifying that, and indeed, the reasons are discussed in the Compatibility Notes section at https://www.rfc-editor.org/rfc/rfc8414.html#section-5 .  However, in practice, in multitenant systems, while the tenant will likely have write access to https://example.com/<tenant-id>/ and can put a .well-known resource there, it likely will not have write access to https://example.com/ and so cannot put a .well-known resource there.\r\n\r\nAt a minimum, I'd describe the problem and say that, in practice, most implementations using paths will need to put the .well-known resource at the end of the path,.\r\n\r\nP.S.  There's a chance that Mark Nottingham and will update the .well-known RFC to explicitly allow this.  I plan to talk to him about it at IETF in London next week.",
+      "createdAt": "2022-10-31T22:31:05Z",
+      "updatedAt": "2022-10-31T22:31:05Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 17,
+      "id": "I_kwDOH6x2C85V_jP1",
+      "title": "Certain metadata elements pose vectors for impersonation",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/issues/17",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Metadata elements such as client_name and logo_uri present in a clients metadata document are self attested by the client, pertain to the clients identity and often used to form UX (in obtaining user consent). They therefore create the possibility for client impersonation. A security consideration should be added to the document that discusses this and more generally any other metadata that may be open to abuse in this manner. In general the only part of the client's identity that can be validated by the AS in following this specification is the clients \"client_uri\".\r\n",
+      "createdAt": "2022-11-09T20:44:40Z",
+      "updatedAt": "2022-11-09T20:45:21Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOH6x2C84_FVgm",
+      "title": "Added document structure and updated document in the introduction sections",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/pull/1",
+      "state": "MERGED",
+      "author": "karthiknz",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-09-16T08:47:24Z",
+      "updatedAt": "2022-09-26T20:03:45Z",
+      "baseRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "299145d7cf00c05f55f778586263542b4d203c73",
+      "headRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "headRefName": "karthik-draft",
+      "headRefOid": "bd16414967691a508de0e1edbf31d8eca07dd471",
+      "closedAt": "2022-09-26T20:03:42Z",
+      "mergedAt": "2022-09-26T20:03:42Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "defd5445039b22c215f7471d44241feda4cc5056"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOH6x2C85COt-e",
+          "commit": {
+            "abbreviatedOid": "5e71137"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-09-16T19:57:39Z",
+          "updatedAt": "2022-09-16T19:57:39Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "I think we might shift these additions into the intro section instead of here",
+              "createdAt": "2022-09-16T19:57:39Z",
+              "updatedAt": "2022-09-16T19:57:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85COvnR",
+          "commit": {
+            "abbreviatedOid": "5e71137"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-09-16T20:05:17Z",
+          "updatedAt": "2022-09-16T20:05:17Z",
+          "comments": [
+            {
+              "originalPosition": 81,
+              "body": "probably want just an oauth2 example request here not openid",
+              "createdAt": "2022-09-16T20:05:17Z",
+              "updatedAt": "2022-09-16T20:05:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85CO0Ip",
+          "commit": {
+            "abbreviatedOid": "5e71137"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-09-16T20:13:47Z",
+          "updatedAt": "2022-09-16T20:13:47Z",
+          "comments": [
+            {
+              "originalPosition": 15,
+              "body": "```suggestion\r\nIn the traditional OAuth 2.0 model {{!RFC6749}}, the authorization server registers and assigns an identifier to a client through a registration process, whether it be dynamically or out of band, during this registration process the authorization server records certain characteristics about the client known as metadata.\r\n\r\nThe requirement for client registration greatly reduces how dynamic the relationship between a client and authorization server can be. For instance a client that is updating the capabilities it supports must update its registration with affect authorization servers for this change to be recognized. The limitation of registration also constrains distributed deployments that feature many clients and authorization servers whereby requiring the client to register is costly.\r\n```",
+              "createdAt": "2022-09-16T20:13:47Z",
+              "updatedAt": "2022-09-16T20:13:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85CO0RK",
+          "commit": {
+            "abbreviatedOid": "5e71137"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-09-16T20:14:26Z",
+          "updatedAt": "2022-09-16T20:14:26Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "We probably need to describe here why dynamic client registration isn't great as a solution too",
+              "createdAt": "2022-09-16T20:14:26Z",
+              "updatedAt": "2022-09-16T20:14:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85CO0oB",
+          "commit": {
+            "abbreviatedOid": "5e71137"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-09-16T20:16:11Z",
+          "updatedAt": "2022-09-16T20:16:11Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "```suggestion\r\nInstead of requiring a registration process, this specification describes a model where a client can make itself discoverable to an authorization server in a similar way an authorization server makes it self discoverable to a client today with (TODO point to OAuth2 metada discovery).\r\n```",
+              "createdAt": "2022-09-16T20:16:11Z",
+              "updatedAt": "2022-09-16T20:16:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85CO03L",
+          "commit": {
+            "abbreviatedOid": "5e71137"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-09-16T20:17:23Z",
+          "updatedAt": "2022-09-16T20:17:24Z",
+          "comments": [
+            {
+              "originalPosition": 38,
+              "body": "Interesting had a tendency to want to rename \"client's metadata url\" here to \"client_id\" but I can see how that would be confusing :) lets discuss some more I think your on the right track though",
+              "createdAt": "2022-09-16T20:17:23Z",
+              "updatedAt": "2022-09-16T20:17:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85CO1HC",
+          "commit": {
+            "abbreviatedOid": "5e71137"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-09-16T20:18:40Z",
+          "updatedAt": "2022-09-16T20:18:41Z",
+          "comments": [
+            {
+              "originalPosition": 40,
+              "body": "```suggestion\r\nThe flow begins by the authorization server making an HTTP GET request to retrieve the metadata of the client from their .well-known client metadata endpoint.\r\n```",
+              "createdAt": "2022-09-16T20:18:40Z",
+              "updatedAt": "2022-09-16T20:18:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85CO1Pm",
+          "commit": {
+            "abbreviatedOid": "5e71137"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-09-16T20:19:20Z",
+          "updatedAt": "2022-09-16T20:19:21Z",
+          "comments": [
+            {
+              "originalPosition": 55,
+              "body": "```suggestion\r\n200 OK\r\n\r\n{\r\n TODO (will want an example doc here right)\r\n}\r\n```",
+              "createdAt": "2022-09-16T20:19:21Z",
+              "updatedAt": "2022-09-16T20:19:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85CO1cC",
+          "commit": {
+            "abbreviatedOid": "5e71137"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-09-16T20:20:21Z",
+          "updatedAt": "2022-09-16T20:20:21Z",
+          "comments": [
+            {
+              "originalPosition": 89,
+              "body": "```suggestion\r\n\r\n<<TODO - define constraints around what client metadata a client should publish e.g a client should not publish a client_secret in their client metadata ;)>>\r\n```",
+              "createdAt": "2022-09-16T20:20:21Z",
+              "updatedAt": "2022-09-16T20:20:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85CQnd-",
+          "commit": {
+            "abbreviatedOid": "5e71137"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-09-19T02:51:22Z",
+          "updatedAt": "2022-09-19T02:51:22Z",
+          "comments": [
+            {
+              "originalPosition": 38,
+              "body": "```suggestion\r\nThe client discovery is performed by an authorization server once the authorisation server has the knowledge of client's metadata url. One such way in which this url is obtained by the authorization server is via an authorization request as outlined in section xxx, where the client's metadata url is derived from the client_id.\r\n```",
+              "createdAt": "2022-09-19T02:51:22Z",
+              "updatedAt": "2022-09-19T02:51:50Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85CSP8_",
+          "commit": {
+            "abbreviatedOid": "5e71137"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-09-19T11:12:20Z",
+          "updatedAt": "2022-09-19T11:12:20Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "Moved the content to Intro section",
+              "createdAt": "2022-09-19T11:12:20Z",
+              "updatedAt": "2022-09-19T11:12:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85CSSPb",
+          "commit": {
+            "abbreviatedOid": "5e71137"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-09-19T11:21:17Z",
+          "updatedAt": "2022-09-19T11:21:17Z",
+          "comments": [
+            {
+              "originalPosition": 81,
+              "body": "Updated the example with OAuth2.0 request (no scope parameter)",
+              "createdAt": "2022-09-19T11:21:17Z",
+              "updatedAt": "2022-09-19T11:21:17Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOH6x2C85AFlxa",
+      "title": "Updated Sections 3 and 4 and added more context in Introduction",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/pull/2",
+      "state": "MERGED",
+      "author": "karthiknz",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Re-formatted the headings, and added more context to the client discovery mechanism, updated Authorization request and Token request response examples and error codes",
+      "createdAt": "2022-10-03T21:08:41Z",
+      "updatedAt": "2022-10-05T09:45:46Z",
+      "baseRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "defd5445039b22c215f7471d44241feda4cc5056",
+      "headRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "headRefName": "k-draft",
+      "headRefOid": "636d88592c69eca886f1251c781461f95b0f0875",
+      "closedAt": "2022-10-05T09:45:42Z",
+      "mergedAt": "2022-10-05T09:45:42Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "047eda39b696c2738ae903fbd0de186bb931a05a"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOH6x2C85DTr3Z",
+          "commit": {
+            "abbreviatedOid": "a412921"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T02:41:16Z",
+          "updatedAt": "2022-10-04T02:41:17Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "```suggestion\r\nAlthough dynamic client registration enables Just-In-Time (JIT) client registration, management of client IDs and secrets is an operational challenge experienced by both clients and server that is not addressed with the dynamic client registration specification. Short-lived clients that runs on a browser may need to register for new client ID everytime it is instantiated due to the lack of long-term storage. This causes lot of dead client registrations. To efficiently manage the registration storage, the authorization server needs to implement a mechanism to periodically prune the dead client entities. Also, when dynamic client registration is enabled for public clients, malicious actors can target the authorization server to overwhelm its resources by registering massive number of fake client entries. Appropriate security mechanisms should be considered by authorization servers to prevent these types of attacks. With the current client registration model, clients that needs to communicate with multiple authorization servers has to maintain multiple client identifiers to interact with them. This forces state management at client side and can be avoided if a client can use a single client identifier across multiple authorization servers.\r\n```",
+              "createdAt": "2022-10-04T02:41:16Z",
+              "updatedAt": "2022-10-04T02:41:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DTshk",
+          "commit": {
+            "abbreviatedOid": "a412921"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T02:46:41Z",
+          "updatedAt": "2022-10-04T02:46:41Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "```suggestion\r\nClient discovery can be performed by an authorization server who has knowledge of a client's url. One such way in which this url is obtained by the authorization server is via a type of authorization request it has received from a client as outlined in [Authorization request using Client Discovery](#authorization-request-using-client-discovery), in this instance the client's url is derived from the client_id present in the authorization request.\r\n```",
+              "createdAt": "2022-10-04T02:46:41Z",
+              "updatedAt": "2022-10-04T02:46:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DTsyU",
+          "commit": {
+            "abbreviatedOid": "a412921"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T02:48:53Z",
+          "updatedAt": "2022-10-04T02:48:54Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "```suggestion\r\nClients supporting discovery MUST make a JSON document available at the path formed by concatenating the string /.well-known/oauth-client to the client's url supplied as client_id. The syntax and semantics of .well-known are defined in RFC 5785 {{!RFC5785}} and apply to the client_id when it contains no path component. Client configuration MUST point to a JSON document compliant with OAuth 2.0 dynamic client registration protocol {{!RFC7591}} and MUST be returned using the application/json content type.\r\n```\r\n\r\nSuggest we generalize this more like how OAuth works https://datatracker.ietf.org/doc/html/rfc8414",
+              "createdAt": "2022-10-04T02:48:53Z",
+              "updatedAt": "2022-10-04T02:48:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DTs3d",
+          "commit": {
+            "abbreviatedOid": "a412921"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T02:49:34Z",
+          "updatedAt": "2022-10-04T02:49:34Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "e.g lets not make it required that the document must be available at /.well-known/oauth-client but offer that as an option.",
+              "createdAt": "2022-10-04T02:49:34Z",
+              "updatedAt": "2022-10-04T02:49:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DVkHb",
+          "commit": {
+            "abbreviatedOid": "a412921"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T11:12:20Z",
+          "updatedAt": "2022-10-04T11:12:20Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "Thank you Tobias - Accepted the changes in the new commit.",
+              "createdAt": "2022-10-04T11:12:20Z",
+              "updatedAt": "2022-10-04T11:12:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DVkQ7",
+          "commit": {
+            "abbreviatedOid": "a412921"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T11:12:52Z",
+          "updatedAt": "2022-10-04T11:12:52Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "As discussed, updated this section to reflect the structure of RFC 8414",
+              "createdAt": "2022-10-04T11:12:52Z",
+              "updatedAt": "2022-10-04T11:12:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DYvgq",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T20:17:32Z",
+          "updatedAt": "2022-10-04T20:17:33Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "```suggestion\r\nClient supporting metadata MUST make a JSON document containing metadata as specified in RFC7591 {{!RFC7591}} available at a path formed by concatenating a well-known URI string to the client_uri value.  By default, the well-known URI string used is \"/.well-known/oauth-client\". This path MUST use the \"https\" scheme. The syntax and semantics of \".well-known\" are defined in RFC 5785 {{!RFC5785}}. The well-known URI suffix used MUST be registered in the IANA \"Well-Known URIs\" registry (IANA.well-known).\r\n```",
+              "createdAt": "2022-10-04T20:17:33Z",
+              "updatedAt": "2022-10-04T20:17:33Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DYvu4",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T20:18:22Z",
+          "updatedAt": "2022-10-04T20:18:23Z",
+          "comments": [
+            {
+              "originalPosition": 37,
+              "body": "```suggestion\r\nAn OAuth 2.0 client using this specification MUST specify what well-known URI suffix it will use for this purpose. The same client MAY choose to publish its metadata at multiple well-known locations derived from its client_uri, for example, publishing metadata at both \"/.well-known/example-configuration\" and\r\n```",
+              "createdAt": "2022-10-04T20:18:22Z",
+              "updatedAt": "2022-10-04T20:18:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DYv1j",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T20:18:47Z",
+          "updatedAt": "2022-10-04T20:18:47Z",
+          "comments": [
+            {
+              "originalPosition": 38,
+              "body": "Is there suppose to be a new line here?",
+              "createdAt": "2022-10-04T20:18:47Z",
+              "updatedAt": "2022-10-04T20:18:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DYxp_",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T20:25:25Z",
+          "updatedAt": "2022-10-04T20:25:25Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "```suggestion\r\nThe response is a set of elements describing client's configuration, including all necessary metadata and public key location information. A successful response MUST use the 200 OK HTTP status code and return a JSON object using the \"application/json\" content type that contains a set of elements as its members that are a subset of the metadata values defined in OAuth 2.0 dynamic client registration protocol {{!RFC7591}}. Other elements MAY also be returned.\r\n```",
+              "createdAt": "2022-10-04T20:25:25Z",
+              "updatedAt": "2022-10-04T20:26:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DYyPn",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T20:27:32Z",
+          "updatedAt": "2022-10-04T20:27:32Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "Instead of saying its a subset of elements from 7591 I think we should just point back to Client metadata section?",
+              "createdAt": "2022-10-04T20:27:32Z",
+              "updatedAt": "2022-10-04T20:27:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DYyzn",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T20:29:35Z",
+          "updatedAt": "2022-10-04T20:29:35Z",
+          "comments": [
+            {
+              "originalPosition": 97,
+              "body": "```suggestion\r\nThe client_uri value returned in the client metadata response MUST be identical to the client_uri value that was used in conjunction with the chosen well-known URI string used to retrieve the metadata. If these values are not identical, the data contained in the response MUST NOT be used.\r\n```",
+              "createdAt": "2022-10-04T20:29:35Z",
+              "updatedAt": "2022-10-04T20:29:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DYz95",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T20:33:42Z",
+          "updatedAt": "2022-10-04T20:33:43Z",
+          "comments": [
+            {
+              "originalPosition": 125,
+              "body": "Suggest we just remove this title and fold into the above?",
+              "createdAt": "2022-10-04T20:33:42Z",
+              "updatedAt": "2022-10-04T20:33:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DY0BW",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T20:33:55Z",
+          "updatedAt": "2022-10-04T20:33:56Z",
+          "comments": [
+            {
+              "originalPosition": 125,
+              "body": "```suggestion\r\n```",
+              "createdAt": "2022-10-04T20:33:55Z",
+              "updatedAt": "2022-10-04T20:33:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DY0HP",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T20:34:14Z",
+          "updatedAt": "2022-10-04T20:34:14Z",
+          "comments": [
+            {
+              "originalPosition": 171,
+              "body": "```suggestion\r\n```\r\n\r\nSame rational as above",
+              "createdAt": "2022-10-04T20:34:14Z",
+              "updatedAt": "2022-10-04T20:34:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DY2Av",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T20:41:16Z",
+          "updatedAt": "2022-10-04T20:41:16Z",
+          "comments": [
+            {
+              "originalPosition": 123,
+              "body": "```suggestion\r\nA client can indicate to an authorisation server that it has discoverable metadata in an authorization request via the \"client_discovery\" request parameter. Presence of this parameter in an authorization request with a value of \"true\" indicates to the authorization server that the \"client_id\" value of the authorization request is the \"client_uri\" for the client and if the authorization server does not already have the metadata for the supplied \"client_id\" it can retrieve the clients metadata by following the procedure outlined in *TODO link to obtaining client metadata section*.\r\n```",
+              "createdAt": "2022-10-04T20:41:16Z",
+              "updatedAt": "2022-10-04T20:41:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DZINN",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T21:58:52Z",
+          "updatedAt": "2022-10-04T21:58:53Z",
+          "comments": [
+            {
+              "originalPosition": 38,
+              "body": "Good spotting. Yes - this is supposed to be in a new line. ",
+              "createdAt": "2022-10-04T21:58:52Z",
+              "updatedAt": "2022-10-05T02:33:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DZISb",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T21:59:19Z",
+          "updatedAt": "2022-10-04T21:59:19Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "updated in the new commit",
+              "createdAt": "2022-10-04T21:59:19Z",
+              "updatedAt": "2022-10-04T21:59:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DZITp",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T21:59:26Z",
+          "updatedAt": "2022-10-04T21:59:26Z",
+          "comments": [
+            {
+              "originalPosition": 37,
+              "body": "updated in the new commit",
+              "createdAt": "2022-10-04T21:59:26Z",
+              "updatedAt": "2022-10-04T21:59:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DZL3I",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T22:19:06Z",
+          "updatedAt": "2022-10-04T22:19:06Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "Sounds good - I have updated this section to reference the Client Metadata section. \r\n\r\nI am not sure whether using the term \"Elements\" is consistent with RFC7591 - In the RFC, elements are called \"Metadata fields\" and in RFC 8414, the term \"Element\" is used for a subset of claims. e.g. \"Claims with zero elements MUST be omitted from the response\". \r\n\r\nShould we use \"Elements\" or \"Metadata fields\" ?  ",
+              "createdAt": "2022-10-04T22:19:06Z",
+              "updatedAt": "2022-10-04T22:19:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DZMtD",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-04T22:24:05Z",
+          "updatedAt": "2022-10-04T22:24:06Z",
+          "comments": [
+            {
+              "originalPosition": 97,
+              "body": "I assume \"client_uri\" is the literal field name in the client metadata and the query parameter that the authorization server uses to concatenate is \"Client ID\"?  ",
+              "createdAt": "2022-10-04T22:24:05Z",
+              "updatedAt": "2022-10-04T22:24:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DZq6L",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-05T01:53:44Z",
+          "updatedAt": "2022-10-05T01:53:44Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "metadata fields is fine with me, lets update",
+              "createdAt": "2022-10-05T01:53:44Z",
+              "updatedAt": "2022-10-05T01:53:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DZrGb",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-05T01:55:29Z",
+          "updatedAt": "2022-10-05T01:55:29Z",
+          "comments": [
+            {
+              "originalPosition": 97,
+              "body": "Yes the language is still not crisp enough IMO but I think we know what its trying to communicate?",
+              "createdAt": "2022-10-05T01:55:29Z",
+              "updatedAt": "2022-10-05T01:55:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DZtUk",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-05T02:15:09Z",
+          "updatedAt": "2022-10-05T02:15:09Z",
+          "comments": [
+            {
+              "originalPosition": 123,
+              "body": "Thank you Tobias - I have added the suggested text.",
+              "createdAt": "2022-10-05T02:15:09Z",
+              "updatedAt": "2022-10-05T02:15:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DZtZc",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-05T02:15:51Z",
+          "updatedAt": "2022-10-05T02:15:51Z",
+          "comments": [
+            {
+              "originalPosition": 171,
+              "body": "Accepted the suggestion and removed the section header.",
+              "createdAt": "2022-10-05T02:15:51Z",
+              "updatedAt": "2022-10-05T02:15:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DZtaF",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-05T02:15:58Z",
+          "updatedAt": "2022-10-05T02:15:59Z",
+          "comments": [
+            {
+              "originalPosition": 125,
+              "body": "Accepted the suggestion and removed the section header.",
+              "createdAt": "2022-10-05T02:15:58Z",
+              "updatedAt": "2022-10-05T02:15:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DZtlZ",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-05T02:17:40Z",
+          "updatedAt": "2022-10-05T02:17:40Z",
+          "comments": [
+            {
+              "originalPosition": 97,
+              "body": "Actually, it made more sense after reading the updates to the next section. I think this should be fine for now.",
+              "createdAt": "2022-10-05T02:17:40Z",
+              "updatedAt": "2022-10-05T02:17:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DZv7I",
+          "commit": {
+            "abbreviatedOid": "3f58b1a"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-05T02:38:51Z",
+          "updatedAt": "2022-10-05T02:38:51Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "Thanks! Replaced \"elements\" with \"fields\" wherever appropriate in the new commit. ",
+              "createdAt": "2022-10-05T02:38:51Z",
+              "updatedAt": "2022-10-05T02:38:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DZ5mm",
+          "commit": {
+            "abbreviatedOid": "fa425f3"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-05T04:03:56Z",
+          "updatedAt": "2022-10-05T04:03:56Z",
+          "comments": [
+            {
+              "originalPosition": 86,
+              "body": "Need to update this to have a client_uri field as its required :)",
+              "createdAt": "2022-10-05T04:03:56Z",
+              "updatedAt": "2022-10-05T04:03:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85Da7Pb",
+          "commit": {
+            "abbreviatedOid": "fa425f3"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-05T09:20:02Z",
+          "updatedAt": "2022-10-05T09:20:03Z",
+          "comments": [
+            {
+              "originalPosition": 86,
+              "body": "Good catch! I have updated the example with client_uri. Also, to keep all the example consistent, I have replaced \"client.example.org\" to \"client.example.com\"",
+              "createdAt": "2022-10-05T09:20:02Z",
+              "updatedAt": "2022-10-05T09:20:03Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDOH6x2C85AR2hF",
+      "title": "Reverting .well-known path formatting to align with RFC 8414",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/pull/3",
+      "state": "MERGED",
+      "author": "karthiknz",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-10-06T07:36:28Z",
+      "updatedAt": "2022-10-12T01:01:13Z",
+      "baseRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "047eda39b696c2738ae903fbd0de186bb931a05a",
+      "headRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "headRefName": "k-draft",
+      "headRefOid": "395d89f71dd20d6f002f166548792cf7fbbbb72a",
+      "closedAt": "2022-10-12T01:01:08Z",
+      "mergedAt": "2022-10-12T01:01:08Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "3dbcd552cd71549725013830f77153872a4fb723"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOH6x2C85DrPDH",
+          "commit": {
+            "abbreviatedOid": "515a44a"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-09T23:58:02Z",
+          "updatedAt": "2022-10-09T23:58:02Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\nClient supporting metadata MUST make a JSON document containing metadata as specified in RFC7591 {{!RFC7591}} available at a path formed by inserting a well-known URI string into the authorization server's issuer identifier between the host component and the path component, if any.  By default, the well-known URI string used is \"/.well-known/oauth-client\". This path MUST use the \"https\" scheme. The syntax and semantics of \".well-known\" are defined in RFC 5785 {{!RFC5785}}. The well-known URI suffix used MUST be registered in the IANA \"Well-Known URIs\" registry (IANA.well-known).\r\n```",
+              "createdAt": "2022-10-09T23:58:02Z",
+              "updatedAt": "2022-10-09T23:58:02Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DrPET",
+          "commit": {
+            "abbreviatedOid": "515a44a"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-09T23:58:39Z",
+          "updatedAt": "2022-10-09T23:58:39Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "```suggestion\r\nDifferent clients utilizing OAuth 2.0 in application-specific ways may define and register different well-known URI suffixes used to publish client metadata as used by those applications.  For instance, if the example client uses in an example-specific way, and there are example-specific metadata values that it needs to publish,then it might register and use the \"example-configuration\" URI suffix and publish the metadata document at the path formed by inserting \"/.well-known/example-configuration\" between the host and path components of the client_uri. Alternatively, many such clients will use the default well-known URI string \"/.well-known/oauth-client\", which is the right choice for general-purpose OAuth 2.0 applications.\r\n```",
+              "createdAt": "2022-10-09T23:58:39Z",
+              "updatedAt": "2022-10-09T23:58:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DrQUj",
+          "commit": {
+            "abbreviatedOid": "515a44a"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-10T00:31:49Z",
+          "updatedAt": "2022-10-10T00:31:50Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Thank you - fixed the typo.",
+              "createdAt": "2022-10-10T00:31:49Z",
+              "updatedAt": "2022-10-10T00:31:50Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DrQU0",
+          "commit": {
+            "abbreviatedOid": "515a44a"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-10T00:31:58Z",
+          "updatedAt": "2022-10-10T00:31:59Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "Thank you - fixed the typo.",
+              "createdAt": "2022-10-10T00:31:58Z",
+              "updatedAt": "2022-10-10T00:31:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DrUWI",
+          "commit": {
+            "abbreviatedOid": "e1bba9a"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-10T02:04:09Z",
+          "updatedAt": "2022-10-10T02:04:10Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\nClient supporting metadata MUST make a JSON document containing metadata as specified in RFC7591 {{!RFC7591}} available at a path formed by inserting a well-known URI string into client_uri between the host component and the path component, if any.  By default, the well-known URI string used is \"/.well-known/oauth-client\". This path MUST use the \"https\" scheme. The syntax and semantics of \".well-known\" are defined in RFC 5785 {{!RFC5785}}. The well-known URI suffix used MUST be registered in the IANA <eref target= \"https://www.iana.org/assignments/well-known-uris\">\"Well-Known URIs\"</eref> registry.\r\n```\r\n```suggestion\r\nClient supporting metadata MUST make a JSON document containing metadata as specified in RFC7591 {{!RFC7591}} available at a path formed by inserting a well-known URI string into the client_uri between the host component and the path component, if any.  By default, the well-known URI string used is \"/.well-known/oauth-client\". This path MUST use the \"https\" scheme. The syntax and semantics of \".well-known\" are defined in RFC 5785 {{!RFC5785}}. The well-known URI suffix used MUST be registered in the IANA <eref target= \"https://www.iana.org/assignments/well-known-uris\">\"Well-Known URIs\"</eref> registry.\r\n```",
+              "createdAt": "2022-10-10T02:04:09Z",
+              "updatedAt": "2022-10-10T02:04:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DrUiR",
+          "commit": {
+            "abbreviatedOid": "e1bba9a"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-10T02:07:16Z",
+          "updatedAt": "2022-10-10T02:07:16Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "```suggestion\r\nDifferent clients utilizing OAuth 2.0 in application-specific ways may define and register different well-known URI suffixes used to publish client metadata as used by those applications, for example using a well-known URI string such as \"/.well-known/example-configuration\". Alternatively, many such clients will use the default well-known URI string \"/.well-known/oauth-client\", which is the right choice for general-purpose OAuth 2.0 applications.\r\n```",
+              "createdAt": "2022-10-10T02:07:16Z",
+              "updatedAt": "2022-10-10T02:11:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DrUzp",
+          "commit": {
+            "abbreviatedOid": "e1bba9a"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-10T02:11:56Z",
+          "updatedAt": "2022-10-10T02:11:56Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "```suggestion\r\nIf the client_uri value contains a path component, any terminating \"/\" MUST be removed before inserting \"/.well-known/\" and the well-known URI suffix between the host component and the path component. The OAuth 2.0 authorization server would make the following request when the client_uri is \"https://client.example.com/client1\" and the well-known URI suffix is \"/.well-known/oauth-client\" to obtain the metadata, since the client_uri contains a path component:\r\n```",
+              "createdAt": "2022-10-10T02:11:56Z",
+              "updatedAt": "2022-10-10T02:11:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DwAx6",
+          "commit": {
+            "abbreviatedOid": "e1bba9a"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-11T01:22:38Z",
+          "updatedAt": "2022-10-11T01:22:39Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "fixed the typo in the new commit",
+              "createdAt": "2022-10-11T01:22:38Z",
+              "updatedAt": "2022-10-11T01:22:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DwBAv",
+          "commit": {
+            "abbreviatedOid": "e1bba9a"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-11T01:24:48Z",
+          "updatedAt": "2022-10-11T01:24:48Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "Fixed in the new commit ",
+              "createdAt": "2022-10-11T01:24:48Z",
+              "updatedAt": "2022-10-11T01:24:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DwBCR",
+          "commit": {
+            "abbreviatedOid": "e1bba9a"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-11T01:25:01Z",
+          "updatedAt": "2022-10-11T01:25:01Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "updated in the new commit",
+              "createdAt": "2022-10-11T01:25:01Z",
+              "updatedAt": "2022-10-11T01:25:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DwUAA",
+          "commit": {
+            "abbreviatedOid": "6be4b74"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-11T04:08:30Z",
+          "updatedAt": "2022-10-11T04:08:31Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "```suggestion\r\nA client can indicate to an authorization server that it has discoverable metadata in an authorization request via the \"client_discovery\" request parameter. Presence of this parameter in an authorization request with a value of \"true\" indicates to the authorization server that the \"client_id\" value of the authorization request is a URL encoded value corresponding to the \"client_uri\" for the client and if the authorization server does not already have the metadata for the identified client it can retrieve the metadata by following the procedure outlined in [Client Metadata Section](#client-metadata).\r\n```",
+              "createdAt": "2022-10-11T04:08:30Z",
+              "updatedAt": "2022-10-11T04:15:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DwUnY",
+          "commit": {
+            "abbreviatedOid": "6be4b74"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-11T04:13:54Z",
+          "updatedAt": "2022-10-11T04:13:54Z",
+          "comments": [
+            {
+              "originalPosition": 78,
+              "body": "```suggestion\r\nThe value of the \"client_id\" parameter in the authorization request MUST represent the URL encoded form of the \"client_uri\" value for the corresponding client. The \"client_id\" value MUST be URL decoded by the authorization server to obtain the \"client_uri\" value which can be used to resolve the client metadata as described in the [Obtaining Client Metadata](#obtaining-client-metadata) section.\r\n```",
+              "createdAt": "2022-10-11T04:13:54Z",
+              "updatedAt": "2022-10-11T04:18:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DwVD7",
+          "commit": {
+            "abbreviatedOid": "6be4b74"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-11T04:17:54Z",
+          "updatedAt": "2022-10-11T04:17:55Z",
+          "comments": [
+            {
+              "originalPosition": 80,
+              "body": "```suggestion\r\n```",
+              "createdAt": "2022-10-11T04:17:54Z",
+              "updatedAt": "2022-10-11T04:17:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85DwVIv",
+          "commit": {
+            "abbreviatedOid": "6be4b74"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-11T04:18:29Z",
+          "updatedAt": "2022-10-11T04:18:29Z",
+          "comments": [
+            {
+              "originalPosition": 82,
+              "body": "```suggestion\r\nFollowing is a non-normative check that an authorization server can perform to validate the clients metadata:\r\n```",
+              "createdAt": "2022-10-11T04:18:29Z",
+              "updatedAt": "2022-10-11T04:18:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85Dx2zG",
+          "commit": {
+            "abbreviatedOid": "6be4b74"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-11T09:35:46Z",
+          "updatedAt": "2022-10-11T09:35:47Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "accepted the changes ",
+              "createdAt": "2022-10-11T09:35:46Z",
+              "updatedAt": "2022-10-11T09:35:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85Dx26D",
+          "commit": {
+            "abbreviatedOid": "6be4b74"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-11T09:36:06Z",
+          "updatedAt": "2022-10-11T09:36:06Z",
+          "comments": [
+            {
+              "originalPosition": 78,
+              "body": "Accepted the changes - Thank you !",
+              "createdAt": "2022-10-11T09:36:06Z",
+              "updatedAt": "2022-10-11T09:36:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85Dx29a",
+          "commit": {
+            "abbreviatedOid": "6be4b74"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-11T09:36:14Z",
+          "updatedAt": "2022-10-11T09:36:15Z",
+          "comments": [
+            {
+              "originalPosition": 80,
+              "body": "Accepted the changes - Thank you !",
+              "createdAt": "2022-10-11T09:36:14Z",
+              "updatedAt": "2022-10-11T09:36:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85Dx3Bl",
+          "commit": {
+            "abbreviatedOid": "6be4b74"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-11T09:36:26Z",
+          "updatedAt": "2022-10-11T09:36:26Z",
+          "comments": [
+            {
+              "originalPosition": 82,
+              "body": "Accepted the changes - Thank you !",
+              "createdAt": "2022-10-11T09:36:26Z",
+              "updatedAt": "2022-10-11T09:36:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85D2TOW",
+          "commit": {
+            "abbreviatedOid": "395d89f"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-10-12T01:01:02Z",
+          "updatedAt": "2022-10-12T01:01:02Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOH6x2C85A4zjV",
+      "title": "Editorial pass",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/pull/4",
+      "state": "MERGED",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-10-17T02:15:04Z",
+      "updatedAt": "2022-10-17T02:52:55Z",
+      "baseRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "a5a7418a59b0302d34df250244275d29a216f731",
+      "headRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "headRefName": "tl/edits",
+      "headRefOid": "b35ad91dac9810c7bfa550cd2793e9a9f94339a5",
+      "closedAt": "2022-10-17T02:52:47Z",
+      "mergedAt": "2022-10-17T02:52:47Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "62a37a8b12c84fb1ea708e10b79875b07902ae35"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOH6x2C85EJ20x",
+          "commit": {
+            "abbreviatedOid": "8272cd4"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-17T02:35:51Z",
+          "updatedAt": "2022-10-17T02:35:52Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\nIn the traditional OAuth 2.0 model {{!RFC6749}}, the authorization server registers and assigns an identifier to a client through a registration process, during this registration process the authorization server records certain characteristics about the client known as metadata.\r\n```",
+              "createdAt": "2022-10-17T02:35:51Z",
+              "updatedAt": "2022-10-17T02:35:52Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "PR_kwDOH6x2C85A5fYu",
+      "title": "Added IANA OAuth parameter registry section and clean-up",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/pull/8",
+      "state": "MERGED",
+      "author": "karthiknz",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Removed operational consideration section, added IANA OAuth parameter registry section and removed todo tags (now tracked under issues)",
+      "createdAt": "2022-10-17T06:19:18Z",
+      "updatedAt": "2022-10-17T21:51:03Z",
+      "baseRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "62a37a8b12c84fb1ea708e10b79875b07902ae35",
+      "headRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "headRefName": "k-draft",
+      "headRefOid": "14c08a1ad8c40b5d36f64d4279a53d1b0ef0b34e",
+      "closedAt": "2022-10-17T21:50:55Z",
+      "mergedAt": "2022-10-17T21:50:55Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "c69ef168081148af56a63237de6d2ea626ebcacc"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOH6x2C85ELAtG",
+          "commit": {
+            "abbreviatedOid": "7e15274"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-17T08:44:57Z",
+          "updatedAt": "2022-10-17T08:44:57Z",
+          "comments": [
+            {
+              "originalPosition": 41,
+              "body": "Is this correct or should it read \r\n\r\n```suggestion\r\nThe following IANA registration requests are made by this document.\r\n```",
+              "createdAt": "2022-10-17T08:44:57Z",
+              "updatedAt": "2022-10-17T08:44:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85EO0Ig",
+          "commit": {
+            "abbreviatedOid": "7e15274"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-17T19:58:38Z",
+          "updatedAt": "2022-10-17T19:58:38Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "I dont believe there are any instances where the client_id isn't past in the token request? Its just a matter of how is it not?",
+              "createdAt": "2022-10-17T19:58:38Z",
+              "updatedAt": "2022-10-17T19:58:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85EPIAK",
+          "commit": {
+            "abbreviatedOid": "7e15274"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-17T21:10:24Z",
+          "updatedAt": "2022-10-17T21:10:24Z",
+          "comments": [
+            {
+              "originalPosition": 41,
+              "body": "Yep - I had the same doubt and am happy to update the text. I just followed PKCE IANA format (https://www.rfc-editor.org/rfc/rfc7636#section-6 ) which doesn't sound right.",
+              "createdAt": "2022-10-17T21:10:24Z",
+              "updatedAt": "2022-10-17T21:10:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85EPKl0",
+          "commit": {
+            "abbreviatedOid": "7e15274"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-17T21:21:29Z",
+          "updatedAt": "2022-10-17T21:21:29Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Agree. I have updated the PR to reflect the same.",
+              "createdAt": "2022-10-17T21:21:29Z",
+              "updatedAt": "2022-10-17T21:22:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85EPKpl",
+          "commit": {
+            "abbreviatedOid": "7e15274"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-17T21:21:45Z",
+          "updatedAt": "2022-10-17T21:21:45Z",
+          "comments": [
+            {
+              "originalPosition": 41,
+              "body": "Updated the PR with suggested text",
+              "createdAt": "2022-10-17T21:21:45Z",
+              "updatedAt": "2022-10-17T21:21:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOH6x2C85EPQ44",
+          "commit": {
+            "abbreviatedOid": "14c08a1"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-10-17T21:50:49Z",
+          "updatedAt": "2022-10-17T21:50:49Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "id": "PR_kwDOH6x2C85A-LtJ",
+      "title": "Editorial pass",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/pull/9",
+      "state": "MERGED",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Few minor updates found on an editorial pass",
+      "createdAt": "2022-10-17T23:22:25Z",
+      "updatedAt": "2022-10-18T01:13:19Z",
+      "baseRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "c69ef168081148af56a63237de6d2ea626ebcacc",
+      "headRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "headRefName": "tl/editorial-pass",
+      "headRefOid": "b8f4af0e7256daf239efa92e60e2bb44b141c932",
+      "closedAt": "2022-10-18T01:13:13Z",
+      "mergedAt": "2022-10-18T01:13:13Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "636339dc1e03aabc97e15b81260bdf79158f8acf"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOH6x2C85EPr9Q",
+          "commit": {
+            "abbreviatedOid": "9f95b92"
+          },
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-10-18T00:55:37Z",
+          "updatedAt": "2022-10-18T00:55:37Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "id": "PR_kwDOH6x2C85CXic2",
+      "title": "Removing loop back interface and localhost address as valid hosts",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/pull/16",
+      "state": "MERGED",
+      "author": "karthiknz",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "as a valid client metadata host due to SSRF risk",
+      "createdAt": "2022-11-07T23:22:44Z",
+      "updatedAt": "2022-11-08T00:32:49Z",
+      "baseRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "04f3abd31cb0e26778464ef6201112b256e6d53e",
+      "headRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "headRefName": "uri-guidance",
+      "headRefOid": "d9fc09d64b5addc271d08cd28d2f916062ad64e3",
+      "closedAt": "2022-11-08T00:32:46Z",
+      "mergedAt": "2022-11-08T00:32:46Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "76195ee341c53b8b4332bfde3b7a2664e9811824"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Partially addresses #11 ",
+          "createdAt": "2022-11-08T00:32:40Z",
+          "updatedAt": "2022-11-08T00:32:40Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOH6x2C85F0D9f",
+          "commit": {
+            "abbreviatedOid": "d9fc09d"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-11-08T00:32:24Z",
+          "updatedAt": "2022-11-08T00:32:24Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "PR_kwDOH6x2C85CzLw-",
+      "title": "Added security guidance for SSRF attacks",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/pull/18",
+      "state": "OPEN",
+      "author": "karthiknz",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-11-14T03:34:41Z",
+      "updatedAt": "2022-11-14T03:34:41Z",
+      "baseRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "ec1d7052626d034294b27c0802e6665a4d240322",
+      "headRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "headRefName": "ssrf-guidance",
+      "headRefOid": "86cc3b151f765f08804a112bfffd7cb7592c7488",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}

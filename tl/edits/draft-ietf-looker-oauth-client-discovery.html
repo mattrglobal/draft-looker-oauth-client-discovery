@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>OAuth 2.0 Client Discovery</title>
+<meta content="Tobias Looker" name="author">
+<meta content="
+       This specification defines a mechanism for an OAuth 2.0 authorization server to obtain the metadata of an OAuth 2.0 client, including its endpoint locations and capabilities without the need for a prior registration step. 
+    " name="description">
+<meta content="xml2rfc 3.15.0" name="generator">
+<meta content="oauth" name="keyword">
+<meta content="draft-ietf-looker-oauth-client-discovery-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.15.0
+    Python 3.10.5
+    appdirs 1.4.4
+    ConfigArgParse 1.5.3
+    google-i18n-address 2.5.2
+    html5lib 1.1
+    intervaltree 3.1.0
+    Jinja2 3.1.2
+    kitchen 1.2.6
+    lxml 4.9.1
+    MarkupSafe 2.1.1
+    pycountry 22.3.5
+    PyYAML 6.0
+    requests 2.27.1
+    setuptools 59.4.0
+    six 1.16.0
+-->
+<link href="draft-ietf-looker-oauth-client-discovery.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Cabin Condensed", sans-serif;
+  font-weight: 600;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+}
+:is(ol, ul) :is(ol, ul) {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+:is(ul, ol).compact, .ulCompact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+  clear: left;
+  --indent: 3ch;
+  /* --indent: attr(indent ch); not supported in any browser, but we can dream */
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+  min-width: 20ch;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+dl > dd {
+  margin-bottom: .8em;
+  margin-left: var(--indent) !important; /* stupid element overrides */
+  min-height: 2ex;
+}
+:is(dl.compact, .dlCompact) > dd {
+  margin-bottom: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:first-child, .break:first-child + *) {
+  margin-top: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:last-child) {
+  margin-bottom: 0;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+}
+dl .break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href].selfRef {
+  color: var(--text-color);
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines */
+  line-height: 0;
+}
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+}
+@media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
+  pre, svg {
+    display: inline-block;
+    overflow-x: auto;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  :is(pre, svg) + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
+  background-color: var(--background-color);
+}
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
+  background-color: var(--highlight-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+}
+a.pilcrow[href] { color: var(--pilcrow-weak); }
+a.pilcrow[href]:hover { text-decoration: none; }
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: 14.5px;
+}
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 15ch;
+}
+#identifiers dt {
+  width: var(--identifier-width);
+  min-width: var(--identifier-width);
+  clear: left;
+  float: left;
+  text-align: right;
+}
+#identifiers dd {
+  margin: 0;
+  margin-left: calc(1em + var(--identifier-width)) !important;
+  min-width: 5em;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+#toc nav ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+#toc nav li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+#toc a.xref {
+  white-space: normal;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dt:target::before {
+  content: "⇒";
+  width: 15px;
+  margin: 0 10px 0 -25px;
+}
+.references dd {
+  margin-left: 8em !important;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc.active {
+      opacity: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 8px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active nav {
+    display: block;
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin-top: 2px;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  #toc nav > ul  {
+    margin-bottom: 2em;
+  }
+  #toc ul {
+    margin: 0 0 0 4px;
+    font-size: var(--small-font-size);
+  }
+  #toc ul :is(p, li) {
+    margin: 2px 0;
+    line-height: 22px;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Changes introduced to fix issues found during implementation */
+
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin: 8px 0.5em 0;
+}
+
+/* Provide styling for table cell text alignment */
+table .text-left {
+  text-align: left;
+}
+table .text-center {
+  text-align: center;
+}
+table .text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 20em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  dd {
+    page-break-before: avoid;
+  }
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
+  stroke: var(--text-color);
+}
+svg :is([stroke="white"], [stroke^="#fff"]) {
+  stroke: var(--background-color);
+}
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
+  fill: var(--text-color);
+}
+svg :is([stroke="fill"], [fill^="#fff"]) {
+  fill: var(--background-color);
+}
+</style>
+
+</head>
+<body class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">OAuth 2.0 Client Discovery</td>
+<td class="right">October 2022</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Looker</td>
+<td class="center">Expires 20 April 2023</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">OAuth Working Group</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-ietf-looker-oauth-client-discovery-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2022-10-17" class="published">17 October 2022</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Informational</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2023-04-20">20 April 2023</time></dd>
+<dt class="label-authors">Author:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">T. Looker</div>
+<div class="org">MATTR</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">OAuth 2.0 Client Discovery</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">This specification defines a mechanism for an OAuth 2.0 authorization server to obtain the metadata of an OAuth 2.0 client, including its endpoint locations and capabilities without the need for a prior registration step.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<section class="note rfcEditorRemove" id="section-note.1">
+      <h2 id="name-discussion-venues">
+<a href="#name-discussion-venues" class="section-name selfRef">Discussion Venues</a>
+      </h2>
+<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">Source for this draft and an issue tracker can be found at
+    <span><a href="https://github.com/mattrglobal/draft-ietf-looker-oauth-client-discovery">https://github.com/mattrglobal/draft-ietf-looker-oauth-client-discovery</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 20 April 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2022 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-conventions-and-terminology" class="internal xref">Conventions and Terminology</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-client-metadata" class="internal xref">Client Metadata</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-obtaining-client-metadata" class="internal xref">Obtaining Client Metadata</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-client-metadata-request" class="internal xref">Client Metadata Request</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-client-metadata-response" class="internal xref">Client Metadata Response</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-client-metadata-validation" class="internal xref">Client Metadata Validation</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-authorization-request-using" class="internal xref">Authorization Request Using Client Discovery</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-token-request-using-client-" class="internal xref">Token Request Using Client Discovery</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-string-operations" class="internal xref">String Operations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-operational-consideration" class="internal xref">Operational Consideration</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-caching" class="internal xref">Caching</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-proposed-client-authenticat" class="internal xref">Proposed Client Authentication methods (to avoid storing client credentials)</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-tls-requirements" class="internal xref">TLS Requirements</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-impersonation-attacks" class="internal xref">Impersonation Attacks</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-compatibility-notes" class="internal xref">Compatibility Notes</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-well-known-uri-registry" class="internal xref">Well-Known URI Registry</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1.2.1">
+                    <p id="section-toc.1-1.10.2.1.2.1.1"><a href="#section-10.1.1" class="auto internal xref">10.1.1</a>.  <a href="#name-registry-contents" class="internal xref">Registry Contents</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">In the traditional OAuth 2.0 model <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span>, the authorization server registers and assigns an identifier to a client through a registration process, during this registration process the authorization server records certain characteristics about the client known as metadata.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">This requirement for registration greatly reduces how dynamic the relationship between a client and authorization server can be. For instance, a client that is updating the capabilities it supports must update its registration with affected authorization servers for this change to be recognized. This requirement also constrains deployments that feature many clients and authorization servers whereby requiring the client to be registered with and maintain this registration with an authorization server is costly.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">To enable a more dynamic relationship between a client and an authorization server, dynamic client registration <span>[<a href="#RFC7591" class="cite xref">RFC7591</a>]</span> was introduced. This model allows a client to register dynamically with a supporting authorization server by sending a registration request. Although this mechanism does provide a way for a client to dynamically register it does introduce new operational challenges for both the client and AS. For instance clients that interface with many authorization servers are burdened with having to manage a client_id per authorization server and in some cases forced to re-register the same client instance multiple times due to storage limitations on the client. Furthermore, protecting the authorization servers registration endpoint forces other design tradeoffs, either the authorization server requires a "registration_token" for registration requests, which is often problematic for public clients to manage/obtain. Or the authorization server permits any registration request and has to mitigate potential spam/malicious registration requests.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">Instead of requiring a registration process, this specification describes a model where a client identifies itself to the authorization server with its client_uri, which can be resolved to its metadata in a similar way to how an authorization server makes its metadata available to a client via <span>[<a href="#RFC8414" class="cite xref">RFC8414</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">The metadata for a client is retrieved from a .well-known location as a JSON <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> document, which declares its endpoint locations and client capabilities (This process is described in <span><a href="#obtaining-client-metadata" class="internal xref">Obtaining Client Metadata</a> (<a href="#obtaining-client-metadata" class="internal xref">Section 3</a>)</span>). Once the client metadata is accepted by the OAuth 2.0 authorization server, the client can interact with the authorisation server like any other OAuth 2.0 client.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">This specification defines a new request parameter 'client_discovery' to indicate that the interacting OAuth 2.0 client has no prior registration with authorization server and expects the authorization server to resolve the metadata from the specified URL. This specification uses the same metadata format defined in the client registration specification <span>[<a href="#RFC7591" class="cite xref">RFC7591</a>]</span> and no additional metadata fields or formats are defined in this specification.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<div id="conventions-and-terminology">
+<section id="section-1.1">
+        <h3 id="name-conventions-and-terminology">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-conventions-and-terminology" class="section-name selfRef">Conventions and Terminology</a>
+        </h3>
+<p id="section-1.1-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
+described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
+appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.1-2">This specification uses the terms "access token", "refresh token", "authorization server", "resource server", "authorization endpoint", "authorization request", "authorization response", "token endpoint", "grant type", "access token request", "access token response", "client", "public client", and "confidential client" defined by The OAuth 2.0 Authorization Framework <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span>.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
+<p id="section-1.1-3">The terms "request", "response", "header field", and "target URI" are imported from <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="client-metadata">
+<section id="section-2">
+      <h2 id="name-client-metadata">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-client-metadata" class="section-name selfRef">Client Metadata</a>
+      </h2>
+<p id="section-2-1">Clients can have metadata described in their configuration. Examples of existing registered metadata fields that a client can make use of can be found at the <a href="https://www.rfc-editor.org/rfc/rfc7591.html#section-4.1"> OAuth 2.0 dynamic client registration metadata IANA registry [RFC 7591]</a>.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">The client's metadata <span class="bcp14">MUST</span> include the client_uri field as defined in section 2 of RFC7591 <span>[<a href="#RFC7591" class="cite xref">RFC7591</a>]</span>. The value of this field <span class="bcp14">MUST</span> be a URI as defined in RFC3986 <span>[<a href="#RFC3986" class="cite xref">RFC3986</a>]</span> with a scheme component that <span class="bcp14">MUST</span> be https, a host component, and optionally, port and path components and no query or fragment components. Additionally, host names <span class="bcp14">MUST</span> be domain names or a loopback interface and <span class="bcp14">MUST NOT</span> be IPv4 or IPv6 addresses except for IPv4 127.0.0.1 or IPv6 (::1).<a href="#section-2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="obtaining-client-metadata">
+<section id="section-3">
+      <h2 id="name-obtaining-client-metadata">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-obtaining-client-metadata" class="section-name selfRef">Obtaining Client Metadata</a>
+      </h2>
+<p id="section-3-1">A Client supporting metadata discovery <span class="bcp14">MUST</span> make a JSON document containing metadata as specified in RFC7591 <span>[<a href="#RFC7591" class="cite xref">RFC7591</a>]</span> available at a path formed by inserting a well-known URI string into the client_uri between the host component and the path component, if any.  By default, the well-known URI string used is "/.well-known/oauth-client". This path <span class="bcp14">MUST</span> use the "https" scheme. The syntax and semantics of ".well-known" are defined in RFC 5785 <span>[<a href="#RFC5785" class="cite xref">RFC5785</a>]</span>. The well-known URI suffix used <span class="bcp14">MUST</span> be registered in the IANA <a href="https://www.iana.org/assignments/well-known-uris">"Well-Known URIs"</a> registry.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">Different clients utilizing OAuth 2.0 in application-specific ways may define and register different well-known URI suffixes used to publish client metadata as used by those applications, for example using a well-known URI string such as "/.well-known/example-configuration". Alternatively, many such clients will use the default well-known URI string "/.well-known/oauth-client", which is the right choice for general-purpose OAuth 2.0 applications.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">An OAuth 2.0 client using this specification <span class="bcp14">MUST</span> specify what well-known URI suffix it will use for this purpose. The same client <span class="bcp14">MAY</span> choose to publish its metadata at multiple well-known locations derived from its client_uri, for example, publishing metadata at both "/.well-known/example-configuration" and
+"/.well-known/oauth-client".<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">Some OAuth 2.0 applications will choose to use the well-known URI suffix "openid-federation", as described in <span><a href="#compatibility-notes" class="internal xref">Compatibility Notes</a> (<a href="#compatibility-notes" class="internal xref">Section 9</a>)</span>.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<div id="client-metadata-request">
+<section id="section-3.1">
+        <h3 id="name-client-metadata-request">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-client-metadata-request" class="section-name selfRef">Client Metadata Request</a>
+        </h3>
+<p id="section-3.1-1">A client metadata document <span class="bcp14">MUST</span> be queried using an HTTP "GET" request at the previously specified path. The OAuth 2.0 authorization server would make the following request when the client_uri is "https://client.example.com" and the well-known URI suffix is "oauth-client" to obtain the metadata, since the client_uri contains no path component:<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<div id="section-3.1-2">
+<pre class="lang-http sourcecode">
+GET /.well-known/oauth-client HTTP/1.1
+Host: client.example.com
+</pre><a href="#section-3.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1-3">If the client_uri value contains a path component, any terminating "/" <span class="bcp14">MUST</span> be removed before inserting "/.well-known/" and the well-known URI suffix between the host component and the path component. The OAuth 2.0 authorization server would make the following request when the client_uri is "https://client.example.com/client1" and the well-known URI suffix is "/.well-known/oauth-client" to obtain the metadata, since the client_uri contains a path component:<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<div id="section-3.1-4">
+<pre class="lang-http sourcecode">
+GET /.well-known/oauth-client/client1 HTTP/1.1
+Host: client.example.com
+</pre><a href="#section-3.1-4" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1-5">Using path components enables supporting multiple clients per host. This is required in some complex client configurations. This use of ".well-known" is for supporting multiple clients per host; unlike its use in RFC 5785 <span>[<a href="#RFC5785" class="cite xref">RFC5785</a>]</span>, it does not provide general information about the host.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="client-metadata-response">
+<section id="section-3.2">
+        <h3 id="name-client-metadata-response">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-client-metadata-response" class="section-name selfRef">Client Metadata Response</a>
+        </h3>
+<p id="section-3.2-1">The response is a set of metadata values describing client's configuration, including all valid redirection URIs and public key location information. A successful response <span class="bcp14">MUST</span> use the 200 OK HTTP status code and return a JSON object using the "application/json" content type that contains a set of metadata fields and values as defined in <span><a href="#client-metadata" class="internal xref">Client Metadata</a> (<a href="#client-metadata" class="internal xref">Section 2</a>)</span>. Other metadata fields <span class="bcp14">MAY</span> also be returned.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">Metadata fields that return multiple values are represented as JSON arrays. Metadata fields with no values <span class="bcp14">MUST</span> be omitted from the response.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-3">An error response uses the applicable HTTP status code value.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2-4">The following is a non-normative example response:<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+<div id="section-3.2-5">
+<pre class="lang-http sourcecode">
+HTTP/1.1 200 OK
+Content-Type: application/json
+    {
+      "redirect_uris": [
+        "https://client.example.com/cb",
+        "https://client.example.com/cb2"],
+      "client_name": "My Example Client",
+      "client_uri": "https://client.example.com/",
+      "token_endpoint_auth_method": "client_secret_basic",
+      "logo_uri": "https://client.example.com/logo.png",
+      "jwks_uri": "https://client.example.com/my_public_keys.jwks",
+      "example_extension_parameter": "example_value"
+     }
+</pre><a href="#section-3.2-5" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="client-metadata-validation">
+<section id="section-3.3">
+        <h3 id="name-client-metadata-validation">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-client-metadata-validation" class="section-name selfRef">Client Metadata Validation</a>
+        </h3>
+<p id="section-3.3-1">The  client_uri value returned in the client metadata response <span class="bcp14">MUST</span> be identical to the client_uri value into which the well-known URI string was inserted to create the URL used to retrieve the metadata. If these values are not identical, the data contained in the response <span class="bcp14">MUST NOT</span> be used.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3-2">In the following sections, we describe the mechanism through which a client communicates its metadata discovery url.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="authorization-request-using-client-discovery">
+<section id="section-4">
+      <h2 id="name-authorization-request-using">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-authorization-request-using" class="section-name selfRef">Authorization Request Using Client Discovery</a>
+      </h2>
+<p id="section-4-1">A client can indicate to an authorization server that it has discoverable metadata in an authorization request via the "client_discovery" request parameter. Presence of this parameter in an authorization request with a value of "true" indicates to the authorization server that the "client_id" value of the authorization request is a URL encoded value corresponding to the "client_uri" for the client and if the authorization server does not already have the metadata for the identified client it can retrieve the metadata by following the procedure outlined in <span><a href="#client-metadata" class="internal xref">Client Metadata Section</a> (<a href="#client-metadata" class="internal xref">Section 2</a>)</span>.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">The following is a non-normative example request of a client making an authorization request to an authorization server with the "client_discovery" parameter:<a href="#section-4-2" class="pilcrow">¶</a></p>
+<div id="section-4-3">
+<pre class="lang-http sourcecode">
+GET /authorize?response_type=code
+    &amp;client_id=https%3A%2F%2Fclient.example.com
+    &amp;client_discovery=true
+    &amp;state=af0ifjsldkj
+    &amp;redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb
+HOST: server.example.com
+</pre><a href="#section-4-3" class="pilcrow">¶</a>
+</div>
+<p id="section-4-4">The value of the "client_id" parameter in the authorization request <span class="bcp14">MUST</span> represent the URL encoded form of the "client_uri" value for the corresponding client. The "client_id" value <span class="bcp14">MUST</span> be URL decoded by the authorization server to obtain the "client_uri" value which can be used to resolve the client metadata as described in the <span><a href="#obtaining-client-metadata" class="internal xref">Obtaining Client Metadata</a> (<a href="#obtaining-client-metadata" class="internal xref">Section 3</a>)</span> section.<a href="#section-4-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="token-request-using-client-discovery">
+<section id="section-5">
+      <h2 id="name-token-request-using-client-">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-token-request-using-client-" class="section-name selfRef">Token Request Using Client Discovery</a>
+      </h2>
+<p id="section-5-1">A client can indicate to an authorization server that it has discoverable metadata in an token request via the "client_discovery" request parameter.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">The following is a non-normative example request of a client making an token request using "client_discovery" parameter:<a href="#section-5-2" class="pilcrow">¶</a></p>
+<div id="section-5-3">
+<pre class="lang-http sourcecode">
+POST /token
+Host: server.example.com
+Content-type: application/x-www-form-urlencoded
+Accept: application/json
+
+grant_type=authorization_code
+&amp;code=xxxxxxxx
+&amp;client_id=https://client.example.com/
+&amp;redirect_uri=https://client.example.com/redirect
+&amp;code_verifier=a6128783714cfda1d388e2e98b6ae8221ac31aca31959e59512c59f5
+&amp;client_discovery=true
+</pre><a href="#section-5-3" class="pilcrow">¶</a>
+</div>
+<p id="section-5-4">After extracting the "client_id" URL from the token request, the authorization server <span class="bcp14">MAY</span> execute the <span><a href="#obtaining-client-metadata" class="internal xref">Obtaining Client Metadata</a> (<a href="#obtaining-client-metadata" class="internal xref">Section 3</a>)</span> in order to obtain the client's metadata. Once obtained, it can perform checks based on this metadata in order to decide whether to proceed with the token request.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-5">Once the token request is successfully validated, the token endpoint <span class="bcp14">MUST</span> continue processing as normal (as defined by OAuth 2.0 <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span>)<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-5-6">In case of any errors, error response is returned (<a href="https://www.rfc-editor.org/rfc/rfc6749#section-5.2">as described in the Section 5.2 of [RFC6749]</a>).<a href="#section-5-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="string-operations">
+<section id="section-6">
+      <h2 id="name-string-operations">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-string-operations" class="section-name selfRef">String Operations</a>
+      </h2>
+<p id="section-6-1">Processing some OAuth 2.0 messages requires comparing values in the messages to known values.  For example, the member names in the metadata response might be compared to specific member names such as "client_uri". Comparing Unicode [UNICODE] strings, however, has significant security implications.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">Therefore, comparisons between JSON strings and other Unicode strings <span class="bcp14">MUST</span> be performed as specified below:<a href="#section-6-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6-3">
+<li id="section-6-3.1">Remove any JSON-applied escaping to produce an array of Unicode
+code points.<a href="#section-6-3.1" class="pilcrow">¶</a>
+</li>
+        <li id="section-6-3.2">Unicode Normalization [USA15] <span class="bcp14">MUST NOT</span> be applied at any point to
+either the JSON string or the string it is to be compared
+against.<a href="#section-6-3.2" class="pilcrow">¶</a>
+</li>
+        <li id="section-6-3.3">Comparisons between the two strings <span class="bcp14">MUST</span> be performed as a
+Unicode code-point-to-code-point equality comparison.<a href="#section-6-3.3" class="pilcrow">¶</a>
+</li>
+      </ol>
+<p id="section-6-4">Note that this is the same equality comparison procedure described in (<a href="https://www.rfc-editor.org/rfc/rfc8259#section-8.3"> Section 8.3 of [RFC8259]</a>).<a href="#section-6-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="operational-consideration">
+<section id="section-7">
+      <h2 id="name-operational-consideration">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-operational-consideration" class="section-name selfRef">Operational Consideration</a>
+      </h2>
+<div id="caching">
+<section id="section-7.1">
+        <h3 id="name-caching">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-caching" class="section-name selfRef">Caching</a>
+        </h3>
+<p id="section-7.1-1">&lt;&lt; TODO - Expand on caching considerations for the client metadata that could be added (e.g HTTP request caching) to limit how often an AS/OP needs to actually resolve the clients ID. &gt;&gt;<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="proposed-client-authentication-methods-to-avoid-storing-client-credentials">
+<section id="section-7.2">
+        <h3 id="name-proposed-client-authenticat">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-proposed-client-authenticat" class="section-name selfRef">Proposed Client Authentication methods (to avoid storing client credentials)</a>
+        </h3>
+<p id="section-7.2-1">&lt;&lt; TODO - Explain different methods for client authenticaiton (attestation, JWTs for client authentication <span>[<a href="#RFC7523" class="cite xref">RFC7523</a>]</span> &gt;&gt;<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-8">
+      <h2 id="name-security-considerations">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<div id="tls-requirements">
+<section id="section-8.1">
+        <h3 id="name-tls-requirements">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-tls-requirements" class="section-name selfRef">TLS Requirements</a>
+        </h3>
+<p id="section-8.1-1">Implementations <span class="bcp14">MUST</span> support TLS.  Which version(s) ought to be implemented will vary over time and depend on the widespread
+deployment and known security vulnerabilities at the time of implementation.  The client <span class="bcp14">MUST</span> support TLS version 1.2 <span>[<a href="#RFC5246" class="cite xref">RFC5246</a>]</span> and <span class="bcp14">MAY</span> support additional TLS mechanisms meeting its security requirements.  When using TLS, the authorization server <span class="bcp14">MUST</span> perform a TLS/SSL server certificate check, per RFC 6125 <span>[<a href="#RFC6125" class="cite xref">RFC6125</a>]</span>.
+Implementation security considerations can be found in "Recommendations for Secure Use of Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS)" <span>[<a href="#BCP195" class="cite xref">BCP195</a>]</span>.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.1-2">To protect against information disclosure and tampering, confidentiality protection <span class="bcp14">MUST</span> be applied using TLS with a ciphersuite that provides confidentiality and integrity protection.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="impersonation-attacks">
+<section id="section-8.2">
+        <h3 id="name-impersonation-attacks">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-impersonation-attacks" class="section-name selfRef">Impersonation Attacks</a>
+        </h3>
+<p id="section-8.2-1">TLS certificate checking <span class="bcp14">MUST</span> be performed by the authorization server, as described in <a href="#tls-requirements" class="auto internal xref">Section 8.1</a>, when making a client metadata request. Checking that the server certificate is valid for the "client_uri" URL prevents man-in-middle and DNS-based attacks. These attacks could cause a authorization server to be tricked into using an attacker's keys and endpoints, which would enable impersonation of the legitimate client.  If an attacker can accomplish this, they can access the resources that the affected client has access to by impersonating their profile.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-2">An attacker may also attempt to impersonate a client by publishing a metadata document that contains a "client_uri" claim using the "client_uri" URL of the client being impersonated, but with its own endpoints and signing keys. This would enable it to impersonate that client, if accepted
+by the authorization server.  To prevent this, the authorization server <span class="bcp14">MUST</span> ensure that the "client_uri" URL it is using as the prefix for the metadata request exactly matches the value of the "client_uri" metadata value in the client's metadata document received by the authorization server.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="compatibility-notes">
+<section id="section-9">
+      <h2 id="name-compatibility-notes">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-compatibility-notes" class="section-name selfRef">Compatibility Notes</a>
+      </h2>
+<p id="section-9-1">&lt;&lt; TODO - Reference OpenID Federation compatability consideration &gt;&gt;<a href="#section-9-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-10">
+      <h2 id="name-iana-considerations">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-10-1">&lt;&lt; TODO - Confirm whether to use the same IANA Consideration text as RFC 8414 &gt;&gt;<a href="#section-10-1" class="pilcrow">¶</a></p>
+<div id="well-known-uri-registry">
+<section id="section-10.1">
+        <h3 id="name-well-known-uri-registry">
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-well-known-uri-registry" class="section-name selfRef">Well-Known URI Registry</a>
+        </h3>
+<p id="section-10.1-1">This specification registers the well-known URI defined in <span><a href="#obtaining-client-metadata" class="internal xref">Obtaining Client Metadata</a> (<a href="#obtaining-client-metadata" class="internal xref">Section 3</a>)</span> in the (<a href="https://www.iana.org/assignments/well-known-uris/well-known-uris.xhtml">IANA "Well-Known URIs" registry</a>) established by RFC 5785 <span>[<a href="#RFC5785" class="cite xref">RFC5785</a>]</span><a href="#section-10.1-1" class="pilcrow">¶</a></p>
+<div id="registry-contents">
+<section id="section-10.1.1">
+          <h4 id="name-registry-contents">
+<a href="#section-10.1.1" class="section-number selfRef">10.1.1. </a><a href="#name-registry-contents" class="section-name selfRef">Registry Contents</a>
+          </h4>
+<ul class="normal">
+<li class="normal" id="section-10.1.1-1.1">URI suffix: oauth-client<a href="#section-10.1.1-1.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-10.1.1-1.2">Change controller: IESG<a href="#section-10.1.1-1.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-10.1.1-1.3">Specification document: <a href="#obtaining-client-metadata" class="auto internal xref">Section 3</a> of RFC 8414<a href="#section-10.1.1-1.3" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-10.1.1-1.4">Related information: (none)<a href="#section-10.1.1-1.4" class="pilcrow">¶</a>
+</li>
+          </ul>
+<p id="section-10.1.1-2">&lt;&lt; TODO - IANA registration - https://www.iana.org/assignments/well-known-uris/well-known-uris.xhtml &gt;&gt;<a href="#section-10.1.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<section id="section-11">
+      <h2 id="name-normative-references">
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+      </h2>
+<dl class="references">
+<dt id="BCP195">[BCP195]</dt>
+      <dd>
+<div class="refInstance" id="RFC7525">
+          <span class="refAuthor">Sheffer, Y.</span>, <span class="refAuthor">Holz, R.</span>, and <span class="refAuthor">P. Saint-Andre</span>, <span class="refTitle">"Recommendations for Secure Use of Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS)"</span>, <span class="seriesInfo">BCP 195</span>, <span class="seriesInfo">RFC 7525</span>, <time datetime="2015-05" class="refDate">May 2015</time>. </div>
+<div class="refInstance" id="RFC8996">
+          <span class="refAuthor">Moriarty, K.</span> and <span class="refAuthor">S. Farrell</span>, <span class="refTitle">"Deprecating TLS 1.0 and TLS 1.1"</span>, <span class="seriesInfo">BCP 195</span>, <span class="seriesInfo">RFC 8996</span>, <time datetime="2021-03" class="refDate">March 2021</time>. </div>
+<span>&lt;<a href="https://www.rfc-editor.org/info/bcp195">https://www.rfc-editor.org/info/bcp195</a>&gt;</span>
+</dd>
+<dd class="break"></dd>
+<dt id="RFC2119">[RFC2119]</dt>
+      <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3986">[RFC3986]</dt>
+      <dd>
+<span class="refAuthor">Berners-Lee, T.</span>, <span class="refAuthor">Fielding, R.</span>, and <span class="refAuthor">L. Masinter</span>, <span class="refTitle">"Uniform Resource Identifier (URI): Generic Syntax"</span>, <span class="seriesInfo">STD 66</span>, <span class="seriesInfo">RFC 3986</span>, <span class="seriesInfo">DOI 10.17487/RFC3986</span>, <time datetime="2005-01" class="refDate">January 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3986">https://www.rfc-editor.org/rfc/rfc3986</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5246">[RFC5246]</dt>
+      <dd>
+<span class="refAuthor">Dierks, T.</span> and <span class="refAuthor">E. Rescorla</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.2"</span>, <span class="seriesInfo">RFC 5246</span>, <span class="seriesInfo">DOI 10.17487/RFC5246</span>, <time datetime="2008-08" class="refDate">August 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5246">https://www.rfc-editor.org/rfc/rfc5246</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5785">[RFC5785]</dt>
+      <dd>
+<span class="refAuthor">Nottingham, M.</span> and <span class="refAuthor">E. Hammer-Lahav</span>, <span class="refTitle">"Defining Well-Known Uniform Resource Identifiers (URIs)"</span>, <span class="seriesInfo">RFC 5785</span>, <span class="seriesInfo">DOI 10.17487/RFC5785</span>, <time datetime="2010-04" class="refDate">April 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5785">https://www.rfc-editor.org/rfc/rfc5785</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6125">[RFC6125]</dt>
+      <dd>
+<span class="refAuthor">Saint-Andre, P.</span> and <span class="refAuthor">J. Hodges</span>, <span class="refTitle">"Representation and Verification of Domain-Based Application Service Identity within Internet Public Key Infrastructure Using X.509 (PKIX) Certificates in the Context of Transport Layer Security (TLS)"</span>, <span class="seriesInfo">RFC 6125</span>, <span class="seriesInfo">DOI 10.17487/RFC6125</span>, <time datetime="2011-03" class="refDate">March 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6125">https://www.rfc-editor.org/rfc/rfc6125</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6749">[RFC6749]</dt>
+      <dd>
+<span class="refAuthor">Hardt, D., Ed.</span>, <span class="refTitle">"The OAuth 2.0 Authorization Framework"</span>, <span class="seriesInfo">RFC 6749</span>, <span class="seriesInfo">DOI 10.17487/RFC6749</span>, <time datetime="2012-10" class="refDate">October 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6749">https://www.rfc-editor.org/rfc/rfc6749</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7523">[RFC7523]</dt>
+      <dd>
+<span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Campbell, B.</span>, and <span class="refAuthor">C. Mortimore</span>, <span class="refTitle">"JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grants"</span>, <span class="seriesInfo">RFC 7523</span>, <span class="seriesInfo">DOI 10.17487/RFC7523</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7523">https://www.rfc-editor.org/rfc/rfc7523</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7591">[RFC7591]</dt>
+      <dd>
+<span class="refAuthor">Richer, J., Ed.</span>, <span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Machulak, M.</span>, and <span class="refAuthor">P. Hunt</span>, <span class="refTitle">"OAuth 2.0 Dynamic Client Registration Protocol"</span>, <span class="seriesInfo">RFC 7591</span>, <span class="seriesInfo">DOI 10.17487/RFC7591</span>, <time datetime="2015-07" class="refDate">July 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7591">https://www.rfc-editor.org/rfc/rfc7591</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+      <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8259">[RFC8259]</dt>
+      <dd>
+<span class="refAuthor">Bray, T., Ed.</span>, <span class="refTitle">"The JavaScript Object Notation (JSON) Data Interchange Format"</span>, <span class="seriesInfo">STD 90</span>, <span class="seriesInfo">RFC 8259</span>, <span class="seriesInfo">DOI 10.17487/RFC8259</span>, <time datetime="2017-12" class="refDate">December 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8259">https://www.rfc-editor.org/rfc/rfc8259</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8414">[RFC8414]</dt>
+      <dd>
+<span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Sakimura, N.</span>, and <span class="refAuthor">J. Bradley</span>, <span class="refTitle">"OAuth 2.0 Authorization Server Metadata"</span>, <span class="seriesInfo">RFC 8414</span>, <span class="seriesInfo">DOI 10.17487/RFC8414</span>, <time datetime="2018-06" class="refDate">June 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8414">https://www.rfc-editor.org/rfc/rfc8414</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9110">[RFC9110]</dt>
+    <dd>
+<span class="refAuthor">Fielding, R., Ed.</span>, <span class="refAuthor">Nottingham, M., Ed.</span>, and <span class="refAuthor">J. Reschke, Ed.</span>, <span class="refTitle">"HTTP Semantics"</span>, <span class="seriesInfo">STD 97</span>, <span class="seriesInfo">RFC 9110</span>, <span class="seriesInfo">DOI 10.17487/RFC9110</span>, <time datetime="2022-06" class="refDate">June 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9110">https://www.rfc-editor.org/rfc/rfc9110</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<div id="acknowledgments">
+<section id="appendix-A">
+      <h2 id="name-acknowledgments">
+<a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="appendix-A-1">TODO acknowledge.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-B">
+      <h2 id="name-authors-address">
+<a href="#name-authors-address" class="section-name selfRef">Author's Address</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Tobias Looker</span></div>
+<div dir="auto" class="left"><span class="org">MATTR</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:tobias.looker@mattr.global" class="email">tobias.looker@mattr.global</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
