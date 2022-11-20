@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-11-15T00:04:08.764398+00:00",
+  "timestamp": "2022-11-20T00:04:33.863486+00:00",
   "repo": "mattrglobal/draft-looker-oauth-client-discovery",
   "labels": [
     {
@@ -275,6 +275,30 @@
       "updatedAt": "2022-11-09T20:45:21Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 19,
+      "id": "I_kwDOH6x2C85WpuCo",
+      "title": "Including the `client_discovery` parameter or not",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/issues/19",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "During IIW, a good point was raised about whether the specification should require a new parameter `client_discovery` for the client to indicate to the AS that its client_id is a URL.\r\n\r\nHere is a brief summary of comments for and against this\r\n\r\nFor\r\n\r\n- The request(s) prepared by the client are simpler. \r\n- There would be no need to defined the client_discovery parameter against all the existing OAuth grant types so this feature can be used\r\n- Passing a parameter who's only possible value is `true` feels awkward (unfortunately RFC 6749 rules out parameters without a value)\r\n\r\nAgainst\r\n\r\n- An AS/OP supporting the client discovery feature has to try and figure out whether the client is intending to use the client discovery feature. Which may involve first looking the client ID up in the AS/OP DB for a match and if not try to parse the client id as a URL. This implicit behaviour means an AS/OP supporting this feature and also traditionally registered clients will likely have to do a URL parse on every client ID it does not find a record for because there is no explicit parameter from the client that allows the AS/OP to seperate this case. Conversely when the client ID is a url the AS/OP will likely be forced to lookup the value in their DB of registered clients before evaluating it is a URL, making the DB call redundant.\r\n",
+      "createdAt": "2022-11-17T18:15:13Z",
+      "updatedAt": "2022-11-18T18:50:12Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Another possible proposal is to transform this parameters value into a enum which members control where the metadata is resolved from allowing for interoperable support between oauth and openid-federation, for example\r\n\r\nWhen the clients metadata is available at `/.well-known/oauth-client` the client discovery parameter value would be `client_discovery=oauth`. When the clients metadata is available at `/.well-known/openid-federation` the client discovery parameter value would be `client_discovery=openid-federation`.",
+          "createdAt": "2022-11-17T18:21:09Z",
+          "updatedAt": "2022-11-17T18:21:09Z"
+        }
+      ]
     }
   ],
   "pulls": [
