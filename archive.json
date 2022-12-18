@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-11-20T00:04:33.863486+00:00",
+  "timestamp": "2022-12-18T00:06:18.006948+00:00",
   "repo": "mattrglobal/draft-looker-oauth-client-discovery",
   "labels": [
     {
@@ -299,6 +299,70 @@
           "updatedAt": "2022-11-17T18:21:09Z"
         }
       ]
+    },
+    {
+      "number": 20,
+      "id": "I_kwDOH6x2C85ZXxZK",
+      "title": "Remove client password language in section 5",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/issues/20",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Because a client in client discovery likely wont have any prior interaction with an AS to establish a client_secret (as is the case in traditional OAuth2) the language about this should be removed in favour of elaborating on signed requests using asymmetric cryptography.",
+      "createdAt": "2022-12-16T01:10:38Z",
+      "updatedAt": "2022-12-16T01:10:38Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 21,
+      "id": "I_kwDOH6x2C85ZXxm_",
+      "title": "Add tos_uri and policy_uri to example metadata",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/issues/21",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "As suggested by someone on the OAuth2 mailing list updating the example using these two metadata elements would be useful.",
+      "createdAt": "2022-12-16T01:11:50Z",
+      "updatedAt": "2022-12-16T01:11:50Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 22,
+      "id": "I_kwDOH6x2C85ZXyQ_",
+      "title": "Make it clear that a single client can have multiple metadata documents for different AS's",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/issues/22",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "In certain situations a client may have a different metadata document per AS for a variety of reasons, this can be accomplished via unique path components in the client_uri. This pattern should be elaborated on in the draft to make it clearer.",
+      "createdAt": "2022-12-16T01:15:07Z",
+      "updatedAt": "2022-12-16T01:15:07Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 23,
+      "id": "I_kwDOH6x2C85ZXyv_",
+      "title": "Define an AS metadata element so that an AS can advertise support for client discovery",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/issues/23",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Supporting this will enable a client to detect whether an AS supports client discovery before launching an authz or token request.",
+      "createdAt": "2022-12-16T01:17:46Z",
+      "updatedAt": "2022-12-16T01:17:46Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
