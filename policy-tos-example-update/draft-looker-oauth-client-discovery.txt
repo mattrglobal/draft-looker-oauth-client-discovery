@@ -5,7 +5,7 @@
 OAuth Working Group                                            T. Looker
 Internet-Draft                                               K. Sivasamy
 Intended status: Informational                                     MATTR
-Expires: 27 April 2023                                   24 October 2022
+Expires: 22 June 2023                                   19 December 2022
 
 
                        OAuth 2.0 Client Discovery
@@ -13,10 +13,9 @@ Expires: 27 April 2023                                   24 October 2022
 
 Abstract
 
-   This specification defines a mechanism for an OAuth 2.0 authorization
-   server to obtain the metadata of an OAuth 2.0 client, including its
-   endpoint locations and capabilities without the need for registration
-   of the client.
+   This specification defines a mechanism for an authorization server to
+   obtain the metadata of a client, including its endpoint locations and
+   capabilities without the need for a registration process.
 
 Discussion Venues
 
@@ -40,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 April 2023.
+   This Internet-Draft will expire on 22 June 2023.
 
 Copyright Notice
 
@@ -83,9 +82,9 @@ Table of Contents
 1.  Introduction
 
    In the traditional OAuth 2.0 model [RFC6749], the authorization
-   server registers and assigns an identifier to a client through a
+   server (AS) registers and assigns an identifier to a client through a
    registration process, during which the authorization server records
-   certain characteristics about the client commonly known as its
+   certain characteristics about the client, commonly known as its
    metadata.
 
    This requirement for registration greatly reduces how dynamic the
@@ -104,16 +103,16 @@ Table of Contents
    Although this mechanism does provide some benefits it also introduces
    new operational challenges for both the client and AS.  For instance
    clients that interface with many authorization servers are burdened
-   with having to manage a client_id per authorization server and in
-   some cases forced to re-register the same client instance multiple
-   times due to storage limitations on the client.  Furthermore,
+   with having to manage a client identifier per authorization server
+   and in some cases forced to re-register the same client instance
+   multiple times due to local storage limitations.  Furthermore,
    protecting the authorization servers registration endpoint forces
-   other design tradeoffs, either the authorization server requires a
-   "registration_token" for registration requests, which is often
-   problematic for public clients to manage/obtain.  Or the
-   authorization server permits any registration request and has to
-   mitigate potential spam/malicious registration requests via some
-   other mechanism.
+   other design tradeoffs, typically either the authorization server
+   enforces some form of authentication (e.g a "registration_token") for
+   registration requests, which is often problematic for public clients
+   to manage/obtain.  Or the authorization server permits any
+   registration request and has to mitigate potential spam/malicious
+   registration requests via some other mechanism.
 
    Instead of requiring a registration process, this specification
    describes a model where a client identifies itself to the
@@ -125,14 +124,13 @@ Table of Contents
    a JSON [RFC8259] document, which declares its endpoint locations and
    client capabilities, this process is described in Obtaining Client
    Metadata (Section 3).  Once the client metadata is retrieved and
-   processed by the OAuth 2.0 authorization server, the client can
-   interact with the authorization server like any other OAuth 2.0
-   client.
+   processed by the authorization server, the client can interact with
+   the authorization server like any other client.
 
    This specification defines a new request parameter 'client_discovery'
-   to indicate that the interacting OAuth 2.0 client has no prior
-   registration with the authorization server and instead has resolvable
-   metadata that describes its endpoint locations and capabilities.
+   to indicate that the interacting client has no prior registration
+   with the authorization server and instead has resolvable metadata
+   that describes its endpoint locations and capabilities.
 
    This specification uses the metadata elements defined in the client
    registration specification [RFC7591] and no additional metadata
@@ -169,8 +167,7 @@ Table of Contents
    MUST be a URI as defined in RFC3986 [RFC3986] with a scheme component
    that MUST be https, a host component, and optionally, port and path
    components and no query or fragment components.  Additionally, host
-   names MUST be domain names or a loopback interface and MUST NOT be
-   IPv4 or IPv6 addresses except for IPv4 127.0.0.1 or IPv6 (::1).
+   names MUST be domain names and MUST NOT be IPv4 or IPv6 addresses.
 
 3.  Obtaining Client Metadata
 
@@ -256,11 +253,13 @@ Table of Contents
        "client_uri": "https://client.example.com",
        "client_name": "My Example Client",
        "redirect_uris": [
-       "https://client.example.com/cb",
-       "https://client.example.com/cb2"],
-       "token_endpoint_auth_method": "client_secret_basic",
+           "https://client.example.com/cb",
+           "https://client.example.com/cb2"
+       ],
        "logo_uri": "https://client.example.com/logo.png",
        "jwks_uri": "https://client.example.com/my_public_keys.jwks",
+       "tos_uri":"https://client.example.com/tos",
+       "policy_uri":"https://client.example.com/policy"
        "example_extension_parameter": "example_value"
    }
 
@@ -468,13 +467,13 @@ Table of Contents
 
 10.  Normative References
 
-   [BCP195]   Sheffer, Y., Holz, R., and P. Saint-Andre,
+   [BCP195]   Moriarty, K. and S. Farrell, "Deprecating TLS 1.0 and TLS
+              1.1", BCP 195, RFC 8996, March 2021.
+
+              Sheffer, Y., Saint-Andre, P., and T. Fossati,
               "Recommendations for Secure Use of Transport Layer
               Security (TLS) and Datagram Transport Layer Security
-              (DTLS)", BCP 195, RFC 7525, May 2015.
-
-              Moriarty, K. and S. Farrell, "Deprecating TLS 1.0 and TLS
-              1.1", BCP 195, RFC 8996, March 2021.
+              (DTLS)", BCP 195, RFC 9325, November 2022.
 
               <https://www.rfc-editor.org/info/bcp195>
 
