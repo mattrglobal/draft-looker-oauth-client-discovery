@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-12-18T00:06:18.006948+00:00",
+  "timestamp": "2022-12-20T00:03:51.680549+00:00",
   "repo": "mattrglobal/draft-looker-oauth-client-discovery",
   "labels": [
     {
@@ -71,16 +71,24 @@
       "id": "I_kwDOH6x2C85UGX_3",
       "title": "Security Consideration - Referencing RFC 8414 vs defining in the spec",
       "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/issues/6",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "karthiknz",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "<< TODO - Would it be easier to reference security considerations listed in RFC 8414?? >>",
       "createdAt": "2022-10-17T06:05:24Z",
-      "updatedAt": "2022-10-17T06:05:24Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2022-12-19T03:02:24Z",
+      "closedAt": "2022-12-19T03:02:24Z",
+      "comments": [
+        {
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We need to suggest additional security recommendations for this specification. So referencing RFC 8414 won't be sufficient. Closing this issue since we know additional security context should be defined (along with the security elements mentioned in RFC 8414) in the specification.",
+          "createdAt": "2022-12-19T03:02:24Z",
+          "updatedAt": "2022-12-19T03:02:24Z"
+        }
+      ]
     },
     {
       "number": 7,
@@ -110,9 +118,17 @@
       "labels": [],
       "body": "As highlighted by Torsten, attributes like client_name and client_logo that are present in the clients metadata can be a source of possible impersonation if the AS places false trust in this information, the existing security consideration around impersonation should be expanded to highlight this.",
       "createdAt": "2022-10-25T21:44:03Z",
-      "updatedAt": "2022-10-25T21:44:03Z",
+      "updatedAt": "2022-12-19T02:28:04Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "karthiknz",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I believe this is a duplicate to issue #17 which covers a broader context. ",
+          "createdAt": "2022-12-19T02:28:04Z",
+          "updatedAt": "2022-12-19T02:28:04Z"
+        }
+      ]
     },
     {
       "number": 11,
@@ -1968,6 +1984,32 @@
       "headRepository": "mattrglobal/draft-looker-oauth-client-discovery",
       "headRefName": "ssrf-guidance",
       "headRefOid": "86cc3b151f765f08804a112bfffd7cb7592c7488",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 24,
+      "id": "PR_kwDOH6x2C85FvaCg",
+      "title": "updated the client metadata example to include ToS and policy ",
+      "url": "https://github.com/mattrglobal/draft-looker-oauth-client-discovery/pull/24",
+      "state": "OPEN",
+      "author": "karthiknz",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "metadata elements to address issue #21",
+      "createdAt": "2022-12-19T01:45:51Z",
+      "updatedAt": "2022-12-19T01:45:51Z",
+      "baseRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "ec1d7052626d034294b27c0802e6665a4d240322",
+      "headRepository": "mattrglobal/draft-looker-oauth-client-discovery",
+      "headRefName": "policy-tos-example-update",
+      "headRefOid": "134ad04a1a392d61c3de119000c8b6db9210c1ca",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
