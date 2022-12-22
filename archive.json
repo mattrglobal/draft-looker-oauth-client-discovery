@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-12-20T00:03:51.680549+00:00",
+  "timestamp": "2022-12-22T00:04:02.053272+00:00",
   "repo": "mattrglobal/draft-looker-oauth-client-discovery",
   "labels": [
     {
@@ -2003,19 +2003,40 @@
       "labels": [],
       "body": "metadata elements to address issue #21",
       "createdAt": "2022-12-19T01:45:51Z",
-      "updatedAt": "2022-12-19T01:45:51Z",
+      "updatedAt": "2022-12-20T00:24:19Z",
       "baseRepository": "mattrglobal/draft-looker-oauth-client-discovery",
       "baseRefName": "main",
       "baseRefOid": "ec1d7052626d034294b27c0802e6665a4d240322",
       "headRepository": "mattrglobal/draft-looker-oauth-client-discovery",
       "headRefName": "policy-tos-example-update",
-      "headRefOid": "134ad04a1a392d61c3de119000c8b6db9210c1ca",
+      "headRefOid": "15b43f83355b41826d15b6c724bf07a51377f723",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOH6x2C85I7-po",
+          "commit": {
+            "abbreviatedOid": "134ad04"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-12-20T00:04:37Z",
+          "updatedAt": "2022-12-20T00:04:38Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\n    \"tos_uri\": \"https://client.example.com/tos\",\r\n    \"policy_uri\": \"https://client.example.com/policy\",\r\n```",
+              "createdAt": "2022-12-20T00:04:37Z",
+              "updatedAt": "2022-12-20T00:04:38Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
